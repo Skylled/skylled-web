@@ -65,8 +65,9 @@ class ProjectsPage extends StatelessWidget {
                 actions: <Widget>[
                   FlatButton(
                     child: Text('GitHub'),
-                    // TODO: Get GitHub link.
-                    onPressed: () {},
+                    onPressed: () {
+                      launch('https://github.com/Skylled/skylled-web');
+                    },
                   ),
                 ],
               ),
