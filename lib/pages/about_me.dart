@@ -40,6 +40,9 @@ class _AboutPageState extends State<AboutPage> {
               FindMeCard(
                 leading: Image.asset('assets/stadia.png'),
                 title: 'Skull',
+                onTap: () {
+                  launch('https://stadia.com/profile/15286501108470772046');
+                }
               ),
               FindMeCard(
                 leading: Icon(
