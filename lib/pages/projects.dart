@@ -68,7 +68,7 @@ class ProjectsPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      'This source for this website is also available for your perusal!'),
+                      'The source for this website is also available for your perusal!'),
                 ),
               ),
             ],
