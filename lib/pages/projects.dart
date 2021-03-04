@@ -26,6 +26,20 @@ class ProjectsPage extends StatelessWidget {
             children: <Widget>[
               ProjectCard(
                 titleText: 'ExpansionTileCard',
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      launch('https://pub.dev/packages/expansion_tile_card');
+                    },
+                    child: Text('Pub'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      launch('https://github.com/Skylled/expansion_tile_card');
+                    },
+                    child: Text('GitHub'),
+                  ),
+                ],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ExpansionTileCard(
@@ -40,36 +54,22 @@ class ProjectsPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('Pub'),
-                    onPressed: () {
-                      launch('https://pub.dev/packages/expansion_tile_card');
-                    },
-                  ),
-                  TextButton(
-                    child: Text('GitHub'),
-                    onPressed: () {
-                      launch('https://github.com/Skylled/expansion_tile_card');
-                    },
-                  ),
-                ],
               ),
               ProjectCard(
                 titleText: 'Skylled.dev',
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      launch('https://github.com/Skylled/skylled-web');
+                    },
+                    child: Text('GitHub'),
+                  ),
+                ],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                       'This source for this website is also available for your perusal!'),
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('GitHub'),
-                    onPressed: () {
-                      launch('https://github.com/Skylled/skylled-web');
-                    },
-                  ),
-                ],
               ),
             ],
           ),
