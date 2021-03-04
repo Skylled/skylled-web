@@ -52,7 +52,6 @@ class _HomePageState extends State<HomePage> {
               Animation<double> animation,
               Animation<double> secAnimation,
             ) {
-              print('In PTS');
               return FadeThroughTransition(
                 animation: animation,
                 secondaryAnimation: secAnimation,

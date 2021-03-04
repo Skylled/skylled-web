@@ -14,7 +14,6 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   @override
   void initState() {
-    print('Initialized About Page!');
     super.initState();
   }
 
