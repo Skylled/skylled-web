@@ -41,13 +41,13 @@ class ProjectsPage extends StatelessWidget {
                   ),
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('Pub'),
                     onPressed: () {
                       launch('https://pub.dev/packages/expansion_tile_card');
                     },
                   ),
-                  FlatButton(
+                  TextButton(
                     child: Text('GitHub'),
                     onPressed: () {
                       launch('https://github.com/Skylled/expansion_tile_card');
@@ -63,7 +63,7 @@ class ProjectsPage extends StatelessWidget {
                       'This source for this website is also available for your perusal!'),
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('GitHub'),
                     onPressed: () {
                       launch('https://github.com/Skylled/skylled-web');
