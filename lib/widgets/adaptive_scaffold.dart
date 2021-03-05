@@ -19,8 +19,8 @@ class AdaptiveScaffoldDestination {
   final IconData icon;
 
   const AdaptiveScaffoldDestination({
-    @required this.title,
-    @required this.icon,
+    required this.title,
+    required this.icon,
   });
 }
 
@@ -33,15 +33,13 @@ class AdaptiveScaffold extends StatefulWidget {
   final int selectedIndex;
   final List<AdaptiveScaffoldDestination> destinations;
   final ValueChanged<int> onNavigationIndexChange;
-  final FloatingActionButton floatingActionButton;
 
   AdaptiveScaffold({
-    this.title,
-    this.body,
-    @required this.selectedIndex,
-    @required this.destinations,
-    this.onNavigationIndexChange,
-    this.floatingActionButton,
+    required this.title,
+    required this.body,
+    required this.selectedIndex,
+    required this.destinations,
+    required this.onNavigationIndexChange,
   });
 
   @override
@@ -60,7 +58,6 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
         body: Row(
           children: [
             NavigationRail(
-              leading: widget.floatingActionButton,
               destinations: [
                 ...widget.destinations.map(
                   (d) => NavigationRailDestination(
@@ -101,7 +98,6 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
         currentIndex: widget.selectedIndex,
         onTap: widget.onNavigationIndexChange,
       ),
-      floatingActionButton: widget.floatingActionButton,
     );
   }
 }

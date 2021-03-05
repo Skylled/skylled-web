@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ProjectCard extends StatelessWidget {
   const ProjectCard({
-    this.titleText,
-    this.child,
-    this.actions,
+    required this.titleText,
+    required this.child,
+    required this.actions,
   });
 
   final String titleText;

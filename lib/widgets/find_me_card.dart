@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class FindMeCard extends StatelessWidget {
-  const FindMeCard({@required this.leading, @required this.title, this.onTap});
+  const FindMeCard({required this.leading, required this.title, this.onTap});
 
   final Widget leading;
   final String title;
-  final Function onTap;
+  final Function? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class FindMeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(6.0),
         elevation: 2.0,
         child: InkWell(
-          onTap: onTap,
+          onTap: onTap as void Function()?,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
