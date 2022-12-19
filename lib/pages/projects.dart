@@ -25,6 +25,39 @@ class ProjectsPage extends StatelessWidget {
             runSpacing: 4.0,
             children: <Widget>[
               ProjectCard(
+                titleText: 'Tweet Yeet',
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      launchUrl(Uri(
+                          scheme: 'https',
+                          host: 'play.google.com',
+                          path: 'store/apps/details',
+                          queryParameters: {'id': 'dev.skylled.tweetyeet'}));
+                    },
+                    child: Text('Play Store'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      launchUrl(Uri(
+                        // https://drive.google.com/file/d/1m85CkozX-zrAAuFdrfKHI6egCJKDUbx1/view?usp=share_link
+                        scheme: 'https',
+                        host: 'drive.google.com',
+                        path: 'file/d/1m85CkozX-zrAAuFdrfKHI6egCJKDUbx1/view',
+                      ));
+                    },
+                    child: Text('Community Edition (free)'),
+                  ),
+                ],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('''
+Tweet Yeet is an Android app for deleting tweets from your Twitter account, using your archive.
+
+While the Play Store version costs \$2, I've also provided a free "Community" edition that can be sideloaded.'''),
+                ),
+              ),
+              ProjectCard(
                 titleText: 'ExpansionTileCard',
                 actions: <Widget>[
                   TextButton(
