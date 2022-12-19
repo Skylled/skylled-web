@@ -40,8 +40,12 @@ class _AboutPageState extends State<AboutPage> {
                 leading: Image.asset('assets/stadia.png'),
                 title: 'Skull',
                 onTap: () {
-                  launch('https://stadia.com/profile/15286501108470772046');
-                }
+                  launchUrl(Uri(
+                    scheme: 'https',
+                    host: 'stadia.com',
+                    path: 'profile/15286501108470772046',
+                  ));
+                },
               ),
               FindMeCard(
                 leading: Icon(
@@ -50,7 +54,11 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 title: '@SkylledDev',
                 onTap: () {
-                  launch('https://twitter.com/SkylledDev');
+                  launchUrl(Uri(
+                    scheme: 'https',
+                    host: 'twitter.com',
+                    path: 'SkylledDev',
+                  ));
                 },
               ),
               FindMeCard(
@@ -60,7 +68,11 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 title: '9to5Google',
                 onTap: () {
-                  launch('https://9to5google.com/author/skylled/');
+                  launchUrl(Uri(
+                    scheme: 'https',
+                    host: '9to5google.com',
+                    path: 'author/skylled',
+                  ));
                 },
               ),
               FindMeCard(
@@ -70,7 +82,11 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 title: 'Skylled',
                 onTap: () {
-                  launch('https://github.com/Skylled/');
+                  launchUrl(Uri(
+                    scheme: 'https',
+                    host: 'github.com',
+                    path: 'Skylled',
+                  ));
                 },
               ),
             ],

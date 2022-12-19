@@ -29,13 +29,19 @@ class ProjectsPage extends StatelessWidget {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      launch('https://pub.dev/packages/expansion_tile_card');
+                      launchUrl(Uri(
+                          scheme: 'https',
+                          host: 'pub.dev',
+                          path: 'packages/expansion_tile_card'));
                     },
                     child: Text('Pub'),
                   ),
                   TextButton(
                     onPressed: () {
-                      launch('https://github.com/Skylled/expansion_tile_card');
+                      launchUrl(Uri(
+                          scheme: 'https',
+                          host: 'github.com',
+                          path: 'Skylled/expansion_tile_card'));
                     },
                     child: Text('GitHub'),
                   ),
@@ -60,7 +66,10 @@ class ProjectsPage extends StatelessWidget {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      launch('https://github.com/Skylled/skylled-web');
+                      launchUrl(Uri(
+                          scheme: 'https',
+                          host: 'github.com',
+                          path: 'Skylled/skylled-web'));
                     },
                     child: Text('GitHub'),
                   ),
