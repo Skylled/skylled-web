@@ -37,13 +37,38 @@ class _AboutPageState extends State<AboutPage> {
             runSpacing: 4.0,
             children: <Widget>[
               FindMeCard(
-                leading: Image.asset('assets/stadia.png'),
-                title: 'Skull',
+                leading: Icon(
+                  FontAwesomeIcons.mastodon,
+                  size: 48.0,
+                ),
+                title: '@Skylled@mastodon.social',
                 onTap: () {
                   launchUrl(Uri(
                     scheme: 'https',
-                    host: 'stadia.com',
-                    path: 'profile/15286501108470772046',
+                    host: 'mastodon.social',
+                    path: '@Skylled',
+                  ));
+                },
+              ),
+              FindMeCard(
+                leading: Icon(Icons.email),
+                title: 'Kyle@skylled.dev',
+                onTap: () {
+                  launchUrl(Uri(
+                    scheme: 'mailto:',
+                    host: 'Kyle@skylled.dev',
+                  ));
+                },
+              ),
+              FindMeCard(
+                leading: Icon(FontAwesomeIcons.linkedin),
+                title: 'My work history',
+                onTap: () {
+                  launchUrl(Uri(
+                    // https://www.linkedin.com/in/skylleddev/
+                    scheme: 'https',
+                    host: 'linkedin.com',
+                    path: 'in/skylleddev',
                   ));
                 },
               ),
