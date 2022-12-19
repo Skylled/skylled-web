@@ -58,8 +58,8 @@ class _AboutPageState extends State<AboutPage> {
                 title: 'Kyle@skylled.dev',
                 onTap: () {
                   launchUrl(Uri(
-                    scheme: 'mailto:',
-                    host: 'Kyle@skylled.dev',
+                    scheme: 'mailto',
+                    path: 'Kyle@skylled.dev',
                   ));
                 },
               ),
