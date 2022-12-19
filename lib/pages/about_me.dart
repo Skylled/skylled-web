@@ -41,7 +41,7 @@ class _AboutPageState extends State<AboutPage> {
                   FontAwesomeIcons.mastodon,
                   size: 48.0,
                 ),
-                title: '@Skylled@mastodon.social',
+                title: 'Mastodon',
                 onTap: () {
                   launchUrl(Uri(
                     scheme: 'https',
@@ -51,7 +51,10 @@ class _AboutPageState extends State<AboutPage> {
                 },
               ),
               FindMeCard(
-                leading: Icon(Icons.email),
+                leading: Icon(
+                  Icons.email,
+                  size: 48,
+                ),
                 title: 'Kyle@skylled.dev',
                 onTap: () {
                   launchUrl(Uri(
@@ -61,8 +64,11 @@ class _AboutPageState extends State<AboutPage> {
                 },
               ),
               FindMeCard(
-                leading: Icon(FontAwesomeIcons.linkedin),
-                title: 'My work history',
+                leading: Icon(
+                  FontAwesomeIcons.linkedin,
+                  size: 48,
+                ),
+                title: 'LinkedIn',
                 onTap: () {
                   launchUrl(Uri(
                     // https://www.linkedin.com/in/skylleddev/
@@ -77,7 +83,7 @@ class _AboutPageState extends State<AboutPage> {
                   FontAwesomeIcons.twitter,
                   size: 48.0,
                 ),
-                title: '@SkylledDev',
+                title: 'Twitter (inactive)',
                 onTap: () {
                   launchUrl(Uri(
                     scheme: 'https',
@@ -105,7 +111,7 @@ class _AboutPageState extends State<AboutPage> {
                   FontAwesomeIcons.github,
                   size: 48.0,
                 ),
-                title: 'Skylled',
+                title: 'GitHub',
                 onTap: () {
                   launchUrl(Uri(
                     scheme: 'https',
