@@ -13,7 +13,7 @@ const { title, description } = Astro.props;
   </div>
   
   <div class="relative z-10 max-w-7xl mx-auto px-6">
-    <h1 class="text-5xl md:text-7xl font-display font-bold mb-6" set:html={title} />
+    <h1 class="font-display font-bold mb-6" style="font-size: clamp(2.5rem, 8vw, 5rem);" set:html={title} />
     {description && (
       <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
         {description}
