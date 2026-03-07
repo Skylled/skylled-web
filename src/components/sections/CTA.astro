@@ -1,0 +1,77 @@
+---
+import { ui, defaultLang } from '~/i18n/ui';
+import Button from '~/components/ui/Button.astro';
+import { useTranslations } from '~/i18n/utils';
+
+const { lang = defaultLang } = Astro.params;
+const t = useTranslations(lang);
+
+interface Props {
+  title?: string;
+  description?: string;
+  primaryBtn?: {
+    text: string;
+    href: string;
+  };
+  secondaryBtn?: {
+    text: string;
+    href: string;
+  };
+  disclaimer?: string;
+  variant?: 'default' | 'boxed';
+}
+
+const { 
+  title = t['cta.readyToLaunch'], 
+  description = t['cta.description'], 
+  primaryBtn = { text: t['cta.primary'], href: `/${lang}/pricing` }, 
+  secondaryBtn = { text: t['cta.secondary'], href: `/${lang}/contact` }, 
+  disclaimer = t['cta.disclaimer'],
+  variant = 'default'
+} = Astro.props;
+
+const isBoxed = variant === 'boxed';
+---
+<section class={isBoxed ? "mt-24 max-w-4xl mx-auto px-6" : "py-32 relative overflow-hidden"}>
+    {!isBoxed && (
+      <div class="absolute inset-0 z-0">
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-primary/20 rounded-full blur-[120px]"></div>
+      </div>
+    )}
+
+    <div class={
+      isBoxed 
+        ? "p-12 rounded-3xl bg-primary text-white text-center relative overflow-hidden group shadow-2xl shadow-primary/25"
+        : "max-w-4xl mx-auto px-6 relative z-10 text-center"
+    }>
+        {isBoxed && (
+          <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        )}
+
+        <h2 class={isBoxed ? "text-3xl font-bold mb-4 relative z-10" : "text-5xl md:text-7xl font-display font-bold mb-8"} set:html={title} />
+        
+        <p class={isBoxed ? "text-white/80 mb-8 max-w-md mx-auto relative z-10" : "text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"}>
+            {description}
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center relative z-10">
+            <Button href={primaryBtn.href} size="lg" class={isBoxed ? "bg-white text-primary hover:bg-white/90 shadow-none border-none border-transparent px-8 py-3" : "px-10 py-5 text-lg rounded-full"}>
+              {primaryBtn.text}
+            </Button>
+             <Button 
+              href={secondaryBtn.href}
+              variant={isBoxed ? "ghost" : "outline"}
+              size="lg"
+              class={isBoxed ? "bg-white/10 text-white hover:bg-white/20 border border-white/20 px-8 py-3" : "px-10 py-5 text-lg rounded-full"}
+            >
+              {secondaryBtn.text}
+            </Button>
+        </div>
+        
+        {disclaimer && !isBoxed && (
+            <p class="mt-6 text-sm text-muted-foreground">
+                {disclaimer}
+            </p>
+        )}
+    </div>
+</section>

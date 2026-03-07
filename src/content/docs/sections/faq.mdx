@@ -1,0 +1,43 @@
+---
+title: 'FAQ'
+description: 'Accordion component for Frequently Asked Questions.'
+order: 8
+---
+import FAQ from '~/components/sections/FAQ.astro';
+
+The `FAQ` component renders a list of expandable questions and answers (Accordions), marked up with JSON-LD Schema for SEO.
+
+## Usage
+
+```astro
+import FAQ from '~/components/sections/FAQ.astro';
+
+const items = [
+  { question: "Is this free?", answer: "Yes, it is open source." },
+  { question: "Can I use it for commercial projects?", answer: "Absolutely!" }
+];
+
+<FAQ 
+  title="Frequently Asked Questions" 
+  items={items} 
+/>
+```
+
+## Example
+
+<div class="p-6 border border-foreground/10 rounded-xl mb-6 bg-background">
+    <FAQ 
+      title="Example FAQ"
+      items={[
+        { question: "How does it work?", answer: "It uses the HTML details and summary elements." },
+        { question: "Is it accessible?", answer: "Yes, it uses native browser semantics." }
+      ]}
+    />
+</div>
+
+## Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `title` | `string` | The section heading (optional). |
+| `items` | `{ question: string, answer: string }[]` | Array of Q&A objects. |

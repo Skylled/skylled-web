@@ -1,0 +1,81 @@
+
+---
+import { Github, X } from 'lucide-react';
+import { useTranslations } from '~/i18n/utils';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div 
+  id="opensource-notification"
+  class="fixed bottom-6 right-6 z-50 max-w-sm w-full translate-y-20 opacity-0 transition-all duration-500"
+>
+  <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-4">
+    <!-- Glow effect -->
+    <div class="absolute -top-10 -right-10 w-24 h-24 bg-primary/30 rounded-full blur-2xl"></div>
+    
+    <div class="flex items-start gap-4 relative z-10">
+      <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0">
+        <Github className="w-6 h-6" />
+      </div>
+      
+      <div class="flex-1 min-w-0 pt-0.5">
+        <h3 class="font-semibold text-foreground mb-1">
+          {t['opensource.title']}
+        </h3>
+        <p class="text-sm text-muted-foreground leading-relaxed mb-3">
+          {t['opensource.desc']}
+        </p>
+        
+        <div class="flex items-center gap-3">
+          <a 
+            href="https://github.com/Gladtek/Cooper" 
+            target="_blank"
+            rel="noopener noreferrer" 
+            class="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+          >
+            GitHub &rarr;
+          </a>
+        </div>
+      </div>
+
+      <button 
+        id="dismiss-notification"
+        class="text-muted-foreground hover:text-foreground transition-colors -mt-1 -mr-1 p-1"
+        aria-label="Dismiss"
+      >
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const notification = document.getElementById('opensource-notification');
+  const dismissBtn = document.getElementById('dismiss-notification');
+  const storageKey = 'opensource-notification-dismissed';
+
+  if (notification && !localStorage.getItem(storageKey)) {
+    // Show after delay
+    setTimeout(() => {
+      notification.classList.remove('translate-y-20', 'opacity-0');
+    }, 1500);
+
+    dismissBtn?.addEventListener('click', () => {
+      notification.classList.add('translate-y-20', 'opacity-0');
+      localStorage.setItem(storageKey, 'true');
+      
+      // Remove from DOM after animation
+      setTimeout(() => {
+        notification.remove();
+      }, 500);
+    });
+  } else if (notification) {
+    notification.remove();
+  }
+</script>

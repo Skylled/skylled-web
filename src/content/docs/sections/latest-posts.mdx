@@ -1,0 +1,32 @@
+---
+title: 'Latest Posts'
+description: 'Display recent blog posts automatically.'
+order: 20
+---
+import LatestPosts from '~/components/sections/LatestPosts.astro';
+
+The **LatestPosts** component fetches and displays the most recent blog posts from your content collection.
+
+## Usage
+
+```astro
+import LatestPosts from '~/components/sections/LatestPosts.astro';
+
+<LatestPosts 
+  title="From the Blog" 
+  count={3} 
+/>
+```
+
+## Example
+
+<LatestPosts title="Recent Updates" subtitle="Stay tuned with our latest news." count={3} />
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | `block.title` | The section heading. |
+| `subtitle` | `string` | `block.subtitle` | The subtext below the heading. |
+| `viewAllText` | `string` | `blog.viewAll` | Text for the "View All" link. |
+| `count` | `number` | `3` | Number of posts to display. |

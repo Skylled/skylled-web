@@ -1,0 +1,66 @@
+---
+title: 'Testimonials'
+description: 'Social proof that builds trust.'
+order: 19
+---
+import Testimonials from '~/components/sections/Testimonials.astro';
+import Testimonial from '~/components/ui/Testimonial.astro';
+
+The **Testimonials** component uses a marquee effect (infinite horizontal scroll) to display reviews.
+
+## Usage
+
+```astro
+import Testimonials from '~/components/sections/Testimonials.astro';
+import Testimonial from '~/components/ui/Testimonial.astro';
+
+<Testimonials title="What people say">
+  <Testimonial 
+    quote="This product is amazing!" 
+    author="Jane Doe" 
+    role="Developer" 
+    avatar="https://example.com/jane.jpg" 
+  />
+</Testimonials>
+```
+
+## Example
+
+<Testimonials>
+  <Testimonial 
+    quote="Cooper Templates completely transformed our workflow. The design quality is unmatched." 
+    author="Alex Morgan" 
+    role="Frontend Lead" 
+    avatar="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" 
+  />
+  <Testimonial 
+    quote="The best investment we made for our startup. Highly recommended!" 
+    author="David Kim" 
+    role="Founder" 
+    avatar="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&q=80" 
+  />
+  <Testimonial 
+    quote="Clean code, great documentation, and stunning visuals." 
+    author="Sarah Jenkins" 
+    role="UI Designer" 
+    avatar="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" 
+  />
+</Testimonials>
+
+## Props
+
+### Testimonials
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | `undefined` | Optional heading. Defaults to "Loved by Developers". |
+| `description` | `string` | `undefined` | Optional subtext. |
+
+### Testimonial
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `quote` | `string` | Required | The testimonial text. |
+| `author` | `string` | Required | Name of the reviewer. |
+| `role` | `string` | Required | Job title or company. |
+| `avatar` | `string` | Required | URL of the avatar image. |

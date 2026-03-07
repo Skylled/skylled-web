@@ -1,0 +1,55 @@
+---
+import { clsx } from 'clsx';
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter out h1 (usually the title) and limit depth
+const toc = headings.filter((h) => h.depth > 1 && h.depth <= 3);
+---
+
+<nav class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-auto pb-10">
+  <h4 class="font-bold text-sm mb-4 text-foreground">On this page</h4>
+  <ul class="text-sm space-y-2.5 border-l border-foreground/10 pl-4">
+    {toc.length === 0 && (
+      <li class="pl-2 text-foreground/50 italic text-xs">No subheadings</li>
+    )}
+    {toc.map((heading) => (
+      <li class={clsx(
+        "transition-colors duration-200",
+        heading.depth === 3 && "pl-4"
+      )}>
+        <a 
+          href={`#${heading.slug}`}
+          class="block text-foreground/60 hover:text-primary transition-colors"
+        >
+          {heading.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+    // Simple active state highlighter
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const id = entry.target.getAttribute('id');
+            const link = document.querySelector(`nav ul li a[href="#${id}"]`);
+            if (entry.isIntersecting) {
+                document.querySelectorAll('nav ul li a').forEach(a => {
+                    a.classList.remove('text-primary', 'font-medium');
+                    a.classList.add('text-foreground/60');
+                });
+                link?.classList.remove('text-foreground/60');
+                link?.classList.add('text-primary', 'font-medium');
+            }
+        });
+    }, { rootMargin: '0px 0px -80% 0px' });
+
+    document.querySelectorAll('h2, h3').forEach(h => observer.observe(h));
+</script>

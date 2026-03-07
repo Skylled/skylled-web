@@ -1,0 +1,50 @@
+---
+interface TimelineItem {
+  date: string;
+  title: string;
+  description: string;
+  icon?: string; // Optional icon class or emoji
+}
+
+interface Props {
+  items: TimelineItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="relative wrap overflow-hidden p-10 h-full">
+  <div class="border-2-2 absolute border-opacity-20 border-gray-700 h-full border text-primary" style="left: 50%"></div>
+  
+  {items.map((item, index) => (
+    <div class={`mb-8 flex justify-between items-center w-full ${index % 2 === 0 ? 'flex-row-reverse left-timeline' : 'right-timeline'}`}>
+      <div class="order-1 w-5/12"></div>
+      <div class="z-20 flex items-center order-1 bg-primary shadow-xl w-8 h-8 rounded-full">
+        <h1 class="mx-auto font-semibold text-lg text-white">{index + 1}</h1>
+      </div>
+      <div class={`order-1 w-5/12 px-6 py-4 rounded-lg shadow-xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 backdrop-blur-sm transition-all hover:-translate-y-1 hover:shadow-2xl`}>
+        <span class="mb-3 font-bold text-primary text-sm">{item.date}</span>
+        <h3 class="mb-3 font-bold text-foreground text-xl">{item.title}</h3>
+        <p class="text-sm leading-snug tracking-wide text-muted-foreground text-opacity-100">
+          {item.description}
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+/* Basic responsiveness for timeline */
+@media (max-width: 768px) {
+    .left-timeline, .right-timeline {
+        flex-direction: row !important;
+    }
+    .left-timeline .order-1:nth-child(1), .right-timeline .order-1:nth-child(1) {
+        display: none;
+    }
+    .left-timeline .order-1:nth-child(3), .right-timeline .order-1:nth-child(3) {
+        width: 100%;
+        margin-left: 20px;
+    }
+}
+</style>

@@ -1,0 +1,119 @@
+---
+import { clsx } from 'clsx';
+import { 
+  Atom, 
+  Wind, 
+  Zap, 
+  Layers, 
+  Cpu, 
+  Globe, 
+  Code2,
+  Rocket
+} from 'lucide-react';
+
+interface Props {
+  t: any;
+}
+
+const { t } = Astro.props;
+
+interface TechItem {
+  id: string;
+  name: string;
+  icon: any;
+  category: 'core' | 'frontend' | 'design' | 'devtool' | 'devops';
+  color: string;
+}
+
+const TECH_STACK: TechItem[] = [
+  {
+    id: 'astro',
+    name: 'Astro',
+    icon: Rocket,
+    category: 'core',
+    color: 'text-orange-500',
+  },
+  {
+    id: 'react',
+    name: 'React',
+    icon: Atom,
+    category: 'frontend',
+    color: 'text-blue-400',
+  },
+  {
+    id: 'tailwind',
+    name: 'Tailwind CSS',
+    icon: Wind,
+    category: 'design',
+    color: 'text-cyan-400',
+  },
+  {
+    id: 'typescript',
+    name: 'TypeScript',
+    icon: Code2,
+    category: 'core',
+    color: 'text-blue-600',
+  },
+  {
+    id: 'vite',
+    name: 'Vite',
+    icon: Zap,
+    category: 'devtool',
+    color: 'text-yellow-500',
+  },
+  {
+    id: 'cloudflare',
+    name: 'Cloudflare',
+    icon: Globe,
+    category: 'devops',
+    color: 'text-orange-600',
+  },
+  {
+    id: 'motion',
+    name: 'Motion',
+    icon: Layers,
+    category: 'frontend',
+    color: 'text-pink-500',
+  },
+  {
+    id: 'lucide',
+    name: 'Lucide',
+    icon: Cpu,
+    category: 'design',
+    color: 'text-indigo-400',
+  }
+];
+
+const CATEGORY_COLORS = {
+  core: 'bg-primary/10 text-primary dark:text-primary border-primary/20',
+  frontend: 'bg-blue-600/10 text-blue-950 dark:text-blue-300 border-blue-600/20',
+  design: 'bg-purple-600/10 text-purple-950 dark:text-purple-300 border-purple-600/20',
+  devtool: 'bg-orange-600/10 text-orange-950 dark:text-orange-300 border-orange-600/20',
+  devops: 'bg-green-600/10 text-green-950 dark:text-green-300 border-green-600/20',
+};
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  {TECH_STACK.map((tech) => (
+    <div class="group relative p-6 rounded-2xl border border-foreground/15 bg-background/95 backdrop-blur-sm hover:border-primary/40 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1">
+      <div class="flex items-start justify-between mb-4">
+        <div class={clsx("p-3 rounded-xl bg-foreground/5 transition-colors group-hover:bg-primary/10", tech.color)}>
+          <tech.icon className="w-6 h-6" />
+        </div>
+        <span class={clsx("text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border transition-colors", CATEGORY_COLORS[tech.category])}>
+          {t[`techstack.category.${tech.category}`]}
+        </span>
+      </div>
+      
+      <h3 class="text-lg font-bold mb-1 group-hover:text-primary transition-colors italic">
+        {tech.name}
+      </h3>
+      <p class="text-sm text-foreground/90 dark:text-foreground/80 leading-relaxed font-medium">
+        {t[`techstack.item.${tech.id}.desc`]}
+      </p>
+
+      {/* Background Glow */}
+      <div class="absolute inset-0 rounded-2xl bg-primary/0 group-hover:bg-primary/2 transition-colors -z-1" />
+    </div>
+  ))}
+</div>

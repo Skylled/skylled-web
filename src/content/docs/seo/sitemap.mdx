@@ -1,0 +1,49 @@
+---
+title: 'Sitemap & Indexing'
+description: 'Automated sitemap generation and indexing control.'
+order: 2
+---
+
+A dedicated `sitemap-0.xml` and `sitemap-index.xml` are automatically generated at build time, ensuring search engines can efficiently crawl your site.
+
+## Automated generation
+
+The sitemap is built using `@astrojs/sitemap`. It scans your `dist/` output and includes all static pages by default.
+
+## Excluding Pages (noindex)
+
+You can exclude specific pages from the sitemap and search results using the `noindex` frontmatter property. The system acts as a dual-layer filter:
+
+1.  **Meta Tag**: Adds `<meta name="robots" content="noindex">` to the page HTML.
+2.  **Sitemap Filter**: Automatically removes the URL from `sitemap-0.xml` during the build process.
+
+### Configuration
+
+Add these properties to any content file (`.md`, `.mdx`):
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `noindex` | `boolean` | `false` | Removes from sitemap and prevents indexing. |
+| `nofollow` | `boolean` | `false` | Prevents crawlers from following links on this page. |
+
+### Example
+
+```markdown
+---
+title: "Draft Post"
+noindex: true
+nofollow: true
+---
+```
+
+### Static Pages (`.astro`)
+
+For `.astro` pages (like `src/pages/custom.astro`), you can pass the prop to the `Layout` or explicit `SEO` component:
+
+```astro
+<Layout title="Hidden Page" noindex={true}>
+  <!-- Content -->
+</Layout>
+```
+
+The build script in `astro.config.mjs` scans your `.astro` files for `noindex={true}` and excludes them from the sitemap automatically.

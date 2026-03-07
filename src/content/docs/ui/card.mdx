@@ -1,0 +1,51 @@
+---
+title: 'Card'
+description: 'A flexible container for content grouping.'
+order: 4
+---
+import Card from '~/components/ui/Card.astro';
+import { ArrowRight } from 'lucide-react';
+
+Cards are foundational containers that can be used for anything from feature lists to blog posts.
+
+## Usage
+
+```astro
+import Card from '~/components/ui/Card.astro';
+
+<Card>
+  <h3>Card Title</h3>
+  <p>Card content...</p>
+</Card>
+```
+
+## Interactive Cards
+
+By passing an `href` prop, the card becomes a clickable link with hover effects.
+
+<div class="p-6 border border-foreground/10 rounded-xl mb-6">
+    <Card href="#" class="group max-w-sm">
+        <h4 class="font-bold flex items-center gap-2">
+            Clickable Card 
+            <ArrowRight size={16} class="group-hover:translate-x-1 transition-transform"/>
+        </h4>
+        <p class="text-sm text-muted-foreground mt-2">Hover me to see the effect.</p>
+    </Card>
+</div>
+
+```astro
+<Card href="/somewhere" class="group">
+    <h4 class="flex items-center gap-2">
+        Clickable Card 
+        <ArrowRight class="group-hover:translate-x-1 transition-transform"/>
+    </h4>
+</Card>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `href` | `string` | `undefined` | If provided, renders as an anchor and adds hover styles. |
+| `as` | `string` | `div` (or `a` if href) | The HTML tag to render. |
+| `class` | `string` | `undefined` | Custom classes. |

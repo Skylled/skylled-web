@@ -1,0 +1,86 @@
+---
+import { X } from 'lucide-react';
+
+interface Props {
+  id: string;
+  message: string;
+  link?: string;
+  linkText?: string;
+}
+
+const { id, message, link, linkText } = Astro.props;
+---
+
+<div 
+  id="announcement-banner" 
+  data-banner-id={id}
+  class="bg-primary hover:bg-primary/90 transition-colors text-white relative overflow-hidden hidden"
+  role="alert"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between py-2 text-sm font-medium">
+        <div class="flex-1 flex items-center justify-center gap-2">
+            <span>{message}</span>
+            {link && (
+                <a 
+                    href={link} 
+                    class="underline decoration-white/50 hover:decoration-white transition-all underline-offset-4"
+                    aria-label={linkText || "View announcement details"}
+                >
+                    {linkText}
+                </a>
+            )}
+        </div>
+        <button 
+            id="dismiss-banner"
+            class="p-1 hover:bg-white/20 rounded-full transition-colors shrink-0"
+            aria-label="Dismiss announcement"
+        >
+            <X className="w-4 h-4" />
+        </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById('announcement-banner');
+  const dismissBtn = document.getElementById('dismiss-banner');
+  
+  if (banner && dismissBtn) {
+    const id = banner.getAttribute('data-banner-id');
+    const storageKey = `announcement_${id}`;
+    
+    // Check if previously dismissed
+    const isDismissed = localStorage.getItem(storageKey);
+    
+    if (!isDismissed) {
+      // Show the banner
+      banner.classList.remove('hidden');
+      // Simple animation
+      banner.animate([
+        { height: '0', opacity: '0' },
+        { height: 'auto', opacity: '1' }
+      ], {
+        duration: 300,
+        easing: 'ease-in-out',
+        fill: 'forwards'
+      });
+    }
+
+    dismissBtn.addEventListener('click', () => {
+        // Hide with animation
+        const animation = banner.animate([
+            { height: 'auto', opacity: '1' },
+            { height: '0', opacity: '0' }
+        ], {
+            duration: 300,
+            easing: 'ease-in-out'
+        });
+
+        animation.onfinish = () => {
+            banner.classList.add('hidden');
+            localStorage.setItem(storageKey, 'true');
+        };
+    });
+  }
+</script>

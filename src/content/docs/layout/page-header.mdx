@@ -1,0 +1,35 @@
+---
+title: 'Page Header'
+description: 'Standard header for content pages.'
+order: 11
+---
+import PageHeader from '~/components/layout/PageHeader.astro';
+
+The **PageHeader** component provides a consistent Title and Description layout for the top of your pages.
+
+## Usage
+
+```astro
+import PageHeader from '~/components/layout/PageHeader.astro';
+
+<PageHeader 
+  title="About Us" 
+  description="Learn more about our company and mission." 
+/>
+```
+
+## Example
+
+<div class="border border-foreground/10 rounded-xl overflow-hidden">
+    <PageHeader 
+      title="Documentation" 
+      description="Everything you need to build amazing things." 
+    />
+</div>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | Required | The main heading. |
+| `description` | `string` | `undefined` | Optional subtext. |

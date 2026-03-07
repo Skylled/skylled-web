@@ -1,0 +1,61 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BlogCard from '~/components/blog/BlogCard.astro';
+import { defaultLang } from '~/i18n/ui';
+import { isRtl, useTranslations } from '~/i18n/utils';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  viewAllText?: string;
+  count?: number;
+}
+
+const { lang = defaultLang } = Astro.params;
+const t = useTranslations(lang);
+const arrow = isRtl(lang) ? '←': '→';
+
+const {
+    title = t['blog.title'],
+    subtitle = t['blog.subtitle'],
+    viewAllText = t['blog.viewAll'],
+    count = 3
+} = Astro.props;
+
+const posts = (await getCollection('blog'))
+  .filter((post) => post.id.startsWith(`${lang}/`))
+  .sort(
+	(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  ).slice(0, count);
+---
+
+<section class="py-24 bg-white/2">
+    <div class="max-w-7xl mx-auto px-6">
+         <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-3xl font-display font-bold mb-4">{title}</h2>
+                 <p class="text-muted-foreground">{subtitle}</p>
+            </div>
+            <a href={`/${lang}/blog`} class="text-primary hover:text-primary/80 font-medium hidden md:block">
+                {viewAllText} {arrow}
+            </a>
+         </div>
+
+         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {posts.map((post: CollectionEntry<'blog'>) => (
+                <BlogCard 
+                    title={post.data.title}
+                    description={post.data.description}
+                    pubDate={post.data.pubDate}
+                    slug={`/${lang}/blog/${post.id.split('/').slice(1).join('/').replace(/\.[^/.]+$/, "")}`}
+                    heroImage={post.data.heroImage}
+                    isVideo={post.data.isVideo}
+                />
+            ))}
+         </div>
+         
+         <div class="mt-8 text-center md:hidden">
+             <a href={`/${lang}/blog`} class="text-primary font-medium">{viewAllText} {arrow}</a>
+         </div>
+    </div>
+</section>

@@ -1,0 +1,25 @@
+.link-preview {
+  --link-preview-corners: 0.5em;
+  --link-preview-padding-inline: 0.75rem;
+  background-color: #0065cb;
+  color: white;
+  font-family: sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-inline: auto;
+  margin-block: 2rem;
+  width: fit-content;
+  max-width: 100%;
+}
+.link-preview a {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+lite-youtube {
+    --lyt-play-btn-bg: #f00; /* Play button background */
+    --lyt-play-btn-hover: #c00;
+    max-width: 100%; /* Ensure it's responsive */
+    border-radius: 0.5rem; /* Round corners */
+    margin-block: 2rem;
+}

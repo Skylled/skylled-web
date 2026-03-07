@@ -1,0 +1,58 @@
+---
+title: 'Changelog Item'
+description: 'A timeline entry for release notes.'
+order: 25
+---
+import ChangelogItem from '~/components/blog/ChangelogItem.astro';
+
+The **ChangelogItem** displays a single release entry with version, date, type, and details. It is designed to be used in a list.
+
+## Usage
+
+```astro
+import ChangelogItem from '~/components/blog/ChangelogItem.astro';
+
+<ChangelogItem 
+  version="v1.0.0"
+  title="Initial Release"
+  pubDate={new Date('2024-01-01')}
+  type="major"
+  body="We are live!"
+/>
+```
+
+## Example
+
+<div class="px-6 py-12">
+  <ChangelogItem 
+    version="v2.1.0"
+    title="Performance Boost"
+    pubDate={new Date('2024-03-15')}
+    type="feature"
+    body="Added a new caching layer that improves response times by 50%."
+  />
+  <ChangelogItem 
+    version="v2.0.1"
+    title="Security Patch"
+    pubDate={new Date('2024-03-10')}
+    type="fix"
+    isSecurity
+    body="Fixed a potential vulnerability in the authentication flow."
+  />
+</div>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `version` | `string` | Required | Version tag (e.g. v1.0.0). |
+| `title` | `string` | Required | Release title. |
+| `pubDate` | `Date` | Required | Release date. |
+| `type` | `ReleaseType` | Required | Type of release. |
+| `isSecurity` | `boolean` | `false` | Marks as security update. |
+| `body` | `string` | Required | Content/description. |
+| `detailsUrl` | `string` | `undefined` | Link to full notes. |
+| `migrationUrl` | `string` | `undefined` | Link to migration guide. |
+
+### ReleaseType
+`'major' | 'feature' | 'security' | 'fix' | 'improvement' | 'other'`

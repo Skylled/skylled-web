@@ -1,0 +1,114 @@
+---
+import { Check, X, Minus } from 'lucide-react';
+
+interface Plan {
+    name: string;
+    key: string;
+    popular?: boolean;
+}
+
+interface FeatureItem {
+  name: string;
+  starter: string | boolean;
+  pro: string | boolean;
+  enterprise: string | boolean;
+}
+
+interface FeatureCategory {
+  category: string;
+  items: FeatureItem[];
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  features?: FeatureCategory[];
+  plans?: Plan[];
+  labels?: {
+      features: string;
+      popular: string;
+  }
+}
+
+const { 
+  title = "Compare Plans",
+  subtitle = "Find the perfect plan for your needs.",
+  features = [
+      { category: "Core Features", items: [
+          { name: "Projects", starter: "3", pro: "Unlimited", enterprise: "Unlimited" },
+          { name: "Users", starter: "1", pro: "5", enterprise: "Unlimited" },
+          { name: "Storage", starter: "1GB", pro: "10GB", enterprise: "Unlimited" },
+      ]},
+      { category: "Analytics", items: [
+          { name: "Basic Analytics", starter: true, pro: true, enterprise: true },
+          { name: "Advanced Reports", starter: false, pro: true, enterprise: true },
+          { name: "Custom Dashboards", starter: false, pro: true, enterprise: true },
+          { name: "Audit Logs", starter: false, pro: false, enterprise: true },
+      ]},
+      { category: "Support & Security", items: [
+          { name: "Email Support", starter: "Standard", pro: "Priority", enterprise: "Dedicated" },
+          { name: "SSO / SAML", starter: false, pro: false, enterprise: true },
+          { name: "SLA", starter: false, pro: false, enterprise: "99.99%" },
+      ]}
+  ], 
+  plans = [
+      { name: "Starter", key: "starter" },
+      { name: "Pro", key: "pro", popular: true },
+      { name: "Enterprise", key: "enterprise" }
+  ],
+  labels = { features: "Features", popular: "Most Popular" }
+} = Astro.props;
+---
+
+<section class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl font-display font-bold mb-6">{title}</h2>
+            <p class="text-lg text-muted-foreground">{subtitle}</p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-white/10">
+                        <th class="py-6 px-6 font-bold text-lg min-w-[200px]">{labels.features}</th>
+                        {plans.map(plan => (
+                            <th class={`py-6 px-6 font-bold text-lg min-w-[150px] text-center ${plan.popular ? 'text-primary' : ''}`}>
+                                {plan.name}
+                                {plan.popular && <span class="block text-xs font-normal text-muted-foreground mt-1">{labels.popular}</span>}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {features.map(category => (
+                        <>
+                            <tr class="bg-white/[0.02]">
+                                <td colspan="4" class="py-4 px-6 font-semibold text-sm text-muted-foreground uppercase tracking-wider">
+                                    {category.category}
+                                </td>
+                            </tr>
+                            {category.items.map(item => (
+                                <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                                    <td class="py-4 px-6 font-medium">{item.name}</td>
+                                    {plans.map(plan => {
+                                        const val = item[plan.key as keyof typeof item];
+                                        return (
+                                            <td class="py-4 px-6 text-center">
+                                                {typeof val === 'boolean' ? (
+                                                    val ? <Check className="w-5 h-5 text-primary mx-auto" /> : <Minus className="w-5 h-5 text-muted-foreground/30 mx-auto" />
+                                                ) : (
+                                                    <span class="text-sm">{val}</span>
+                                                )}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            ))}
+                        </>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,73 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  children?: any;
+}
+import { ui, defaultLang } from '~/i18n/ui';
+import { isRtl, useTranslations } from '~/i18n/utils';
+
+const { title, description } = Astro.props;
+const { lang = defaultLang } = Astro.params;
+const t = useTranslations(lang);
+const path = isRtl(lang) ? '50%': '-50%';
+---
+
+<section class="py-24 overflow-hidden relative group">
+   <div class="absolute inset-0 bg-linear-to-r from-background via-transparent to-background z-10 pointer-events-none"></div>
+   
+   <div class="mb-12 text-center relative z-20">
+       <h2 class="text-3xl font-display font-bold">
+         {title ? title : <>Loved by <span class="text-primary">Developers</span></>}
+       </h2>
+       {description && <p class="text-muted-foreground mt-4">{description}</p>}
+   </div>
+
+  <div class="flex overflow-hidden">
+    <div class="testimonials-track flex gap-8 w-max">
+      <slot />
+    </div>
+  </div>
+
+  <div class="text-center mt-8">
+      <p class="text-xs text-muted-foreground/50">{t['testimonials.disclaimer']}</p>
+  </div>
+</section>
+
+<script>
+  function setupMarquees() {
+    const tracks = document.querySelectorAll('.testimonials-track');
+    
+    tracks.forEach((track) => {
+      if (track.getAttribute('data-cloned') === 'true') return;
+
+      const content = track.innerHTML;
+      // Clone 3 times to ensure smooth infinite scroll
+      track.innerHTML = content + content + content + content;
+      track.setAttribute('data-cloned', 'true');
+      
+      // Add animation class
+      track.classList.add('animate-marquee');
+    });
+  }
+
+  // Setup on load and after View Transitions
+  setupMarquees();
+  document.addEventListener('astro:page-load', setupMarquees);
+</script>
+
+<style define:vars={{ path }}>
+  .animate-marquee {
+    animation: marquee 60s linear infinite;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(var(--path)); } 
+  }
+  
+  /* Pause animation on hover for better UX */
+  .group:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+</style>

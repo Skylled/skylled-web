@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  children?: any;
+}
+
+const { title, description } = Astro.props;
+---
+
+<div class="relative group p-8 h-full rounded-3xl overflow-hidden bg-white/5 border border-white/10 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1">
+  <!-- Hover Gradient Background -->
+  <div class="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"></div>
+  
+  <div class="relative z-10 flex flex-col items-start h-full">
+    <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-inner group-hover:bg-primary group-hover:text-white group-hover:shadow-primary/50 ring-1 ring-white/10 ring-inset">
+      <slot name="icon" />
+    </div>
+    
+    <h3 class="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">{title}</h3>
+    
+    <p class="text-base text-muted-foreground leading-relaxed grow">
+      {description}
+    </p>
+  </div>
+</div>

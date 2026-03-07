@@ -1,0 +1,52 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import { ui, defaultLang, languages } from '~/i18n/ui';
+
+const t = ui[defaultLang] as any;
+---
+
+<Layout title={t['404.title']} description={t['404.description']}>
+  <script is:inline define:vars={{ languages, defaultLang }}>
+    // Detect if we are in a sub-path that belongs to a language
+    const pathname = window.location.pathname;
+    const pathParts = pathname.split('/').filter(Boolean);
+    const langPrefix = pathParts[0];
+
+    if (Object.keys(languages).includes(langPrefix) && langPrefix !== defaultLang) {
+      // If the current path doesn't already end in /404, redirect to the localized 404
+      if (!pathname.endsWith('/404') && !pathname.endsWith('/404/')) {
+        window.location.href = `/${langPrefix}/404`;
+      }
+    }
+  </script>
+
+  <div class="min-h-[80vh] flex flex-col items-center justify-center text-center relative overflow-hidden">
+      <!-- Background Effect -->
+      <div class="absolute inset-0 z-0 flex items-center justify-center opacity-20 pointer-events-none">
+          <div class="w-[600px] h-[600px] bg-red-500/20 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div class="relative z-10 px-6">
+        <h1 class="text-9xl font-display font-bold text-black/10 dark:text-white/10 mb-4 select-none">404</h1>
+        <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">{t['404.heading']}</h2>
+        <p class="text-xl text-muted-foreground max-w-lg mx-auto mb-10">
+            {t['404.description']}
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href={`/${defaultLang}`}
+              class="px-8 py-3 bg-primary text-white font-medium rounded-full hover:bg-primary/90 transition-all hover:scale-105"
+            >
+              {t['404.backHome']}
+            </a>
+            <a 
+              href={`/${defaultLang}/contact`}
+              class="px-8 py-3 bg-foreground/5 text-foreground font-medium rounded-full hover:bg-foreground/10 transition-all border border-foreground/10 dark:text-white dark:border-white/10 dark:hover:bg-white/10"
+            >
+              {t['404.reportIssue']}
+            </a>
+        </div>
+      </div>
+  </div>
+</Layout>

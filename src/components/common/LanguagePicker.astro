@@ -1,0 +1,71 @@
+---
+import { languages } from '../../i18n/ui';
+import { Globe } from 'lucide-react';
+
+interface Props {
+    availableLangs?: string[];
+}
+
+const { lang = 'en' } = Astro.params;
+const { availableLangs } = Astro.props;
+
+// Filter the languages list to only show available ones if provided
+const displayLanguages = availableLangs 
+    ? Object.entries(languages).filter(([key]) => availableLangs.includes(key))
+    : Object.entries(languages);
+
+// If we only have 1 (or 0) languages to show, don't render the picker
+const showPicker = displayLanguages.length > 1;
+---
+
+{showPicker && (
+<div class="relative group language-picker">
+    <button id="language-toggle" class="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors focus:outline-none" aria-label="Select Language" aria-expanded="false">
+        <Globe className="w-4 h-4" />
+        <span class="uppercase">{lang}</span>
+    </button>
+    <div id="language-menu" class="absolute right-0 top-full mt-2 w-32 bg-background border border-border rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+        <ul class="py-1">
+            {displayLanguages.map(([label, name]) => (
+                <li>
+                    <a 
+                        href={`/${label}${Astro.url.pathname.replace(new RegExp(`^/(${Object.keys(languages).join('|')})`), '')}`} 
+                        class={`block px-4 py-2 text-sm hover:bg-muted transition-colors ${lang === label ? 'text-primary font-bold' : 'text-foreground'}`}
+                    >
+                        {name}
+                    </a>
+                </li>
+            ))}
+        </ul>
+    </div>
+</div>
+)}
+
+<script>
+    function setupLanguagePicker() {
+        const toggle = document.getElementById('language-toggle');
+        const menu = document.getElementById('language-menu');
+        const container = document.querySelector('.language-picker');
+
+        if (!toggle || !menu || !container) return;
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', (!isExpanded).toString());
+            menu.classList.toggle('!opacity-100');
+            menu.classList.toggle('!visible');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!container.contains(e.target as Node)) {
+                menu.classList.remove('!opacity-100', '!visible');
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+    // Run on invalidation/navigation for View Transitions support
+    setupLanguagePicker();
+    document.addEventListener('astro:page-load', setupLanguagePicker);
+</script>

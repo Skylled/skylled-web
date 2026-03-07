@@ -1,0 +1,21 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  children?: any;
+}
+
+const { title, description } = Astro.props;
+---
+
+<div class="space-y-12">
+  {title && (
+    <div class="text-center">
+      <h2 class="text-3xl font-display font-bold mb-4">{title}</h2>
+      {description && <p class="text-muted-foreground">{description}</p>}
+    </div>
+  )}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <slot />
+  </div>
+</div>

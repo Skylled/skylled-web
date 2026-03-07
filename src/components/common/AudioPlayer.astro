@@ -1,0 +1,14 @@
+---
+import AudioPlayerReact from '~/components/islands/AudioPlayer.jsx';
+
+interface Props {
+  src: string;
+  title?: string;
+}
+
+const { src, title = "Audio Episode" } = Astro.props;
+---
+
+<div id="audio-player-wrapper" class="w-full relative min-h-20">
+    <AudioPlayerReact src={src} title={title} client:load />
+</div>

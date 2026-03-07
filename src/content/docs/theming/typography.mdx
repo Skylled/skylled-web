@@ -1,0 +1,46 @@
+---
+title: "Typography"
+description: "Manage global font settings and prose styling via typography.css."
+---
+
+This file manages all text-related styles, including global font families and overrides for the `@tailwindcss/typography` plugin (used for Markdown content).
+
+## File Location
+`src/styles/typography.css`
+
+## Font Configuration
+
+By default, the global font stack is set in `global.css` (referencing system fonts) and specific headings use 'Outfit'. You can refine these rules here.
+
+## Prose Customization
+
+We use the `.prose` class for rendering Markdown content (Blogs, Docs). `typography.css` allows you to override default Tailwind Typography styles to match your theme.
+
+### Example Overrides
+
+```css
+/* src/styles/typography.css */
+
+@layer utilities {
+  /* Style code blocks */
+  .prose pre {
+    border-radius: 0.75rem !important;
+    background-color: color-mix(in srgb, var(--background), transparent 50%);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Style Headings */
+  .prose h1, .prose h2 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+  }
+  
+  /* Style Tables */
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+}
+```
+
+Modify this file to adjust line-heights, margins, or font-weights for all article content across the site.

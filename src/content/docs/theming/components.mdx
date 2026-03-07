@@ -1,0 +1,40 @@
+---
+title: "Component Styles"
+description: "Custom CSS classes for specific UI components."
+---
+
+For specific components that require custom CSS beyond standard Tailwind utilities—or for third-party integrations—we use `src/styles/components.css`.
+
+## File Location
+`src/styles/components.css`
+
+## Purpose
+
+While we encourage using Tailwind utility classes directly in your `.astro` or `.jsx` files (e.g., `class="p-4 bg-red-500"`), sometimes it is cleaner to extract complex composite styles or style elements where you cannot access the markup directly (like external libraries).
+
+## Existing Classes
+
+### Link Preview (`.link-preview`)
+Styles the rich link preview cards used in MDX files.
+
+```css
+.link-preview {
+  background-color: #389cff;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-inline: auto; /* Centering */
+  margin-block: 2rem;  /* Vertical spacing */
+  width: fit-content;
+}
+```
+
+### YouTube Embed (`lite-youtube`)
+Styles the underlying web component for YouTube videos.
+
+```css
+lite-youtube {
+    max-width: 100%;
+    border-radius: 0.5rem;
+    margin-block: 2rem;
+}
+```

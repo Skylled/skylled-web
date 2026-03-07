@@ -1,0 +1,73 @@
+---
+title: 'Layout'
+description: 'Structural components for page layout.'
+order: 2
+---
+import Container from '~/components/ui/Container.astro';
+import Section from '~/components/layout/Section.astro';
+import Grid from '~/components/ui/Grid.astro';
+
+Layout components help you structure your content effectively.
+
+## Section
+
+The **Section** component wraps content with standardized padding and background options.
+
+```astro
+import Section from '~/components/layout/Section.astro';
+
+<Section variant="boxed">
+  <h2 class="text-2xl font-bold">Boxed Section</h2>
+</Section>
+```
+
+### Variants
+
+<div class="space-y-4">
+    <Section>
+        <div class="p-4 border border-dashed border-gray-400 rounded-lg text-center">
+            Default Section (Full width)
+        </div>
+    </Section>
+    <div class="relative">
+      <Section variant="boxed" class="my-0 py-8">
+          <div class="p-4 border border-dashed border-gray-400 rounded-lg text-center">
+              Boxed Section (Rounded corners, background)
+          </div>
+      </Section>
+    </div>
+</div>
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `'default' \| 'boxed'` | `'default'` | Controls the layout style. |
+
+## Container
+
+The **Container** component centers your content with a max-width.
+
+```astro
+import Container from '~/components/ui/Container.astro';
+
+<Container>
+  <p>This content is centered.</p>
+</Container>
+```
+
+## Grid
+
+The **Grid** component creates a responsive grid layout.
+
+```astro
+import Grid from '~/components/ui/Grid.astro';
+
+<Grid cols={3}>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</Grid>
+```
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `cols` | `1 \| 2 \| 3 \| 4` | `3` | Number of columns on large screens. |

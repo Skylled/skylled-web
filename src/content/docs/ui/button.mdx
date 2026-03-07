@@ -1,0 +1,61 @@
+---
+title: 'Button'
+description: 'Interactive button component with multiple variants and sizes.'
+order: 3
+---
+import Button from '~/components/ui/Button.astro';
+import { Zap } from 'lucide-react';
+
+The `Button` component is used to trigger actions or navigate to other pages.
+
+## Usage
+
+```astro
+import Button from '~/components/ui/Button.astro';
+
+<Button>Click me</Button>
+<Button href="/docs">Link Button</Button>
+```
+
+## Variants
+
+Buttons come in 5 variants to establish hierarchy.
+
+<div class="flex flex-wrap gap-4 p-6 border border-foreground/10 rounded-xl mb-6">
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="icon"><Zap size={20} /></Button>
+</div>
+
+```astro
+<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="icon"><Icon /></Button>
+```
+
+## Sizes
+
+<div class="flex flex-wrap items-center gap-4 p-6 border border-foreground/10 rounded-xl mb-6">
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+</div>
+
+```astro
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'icon'` | `'primary'` | The visual style of the button. |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | The size of the button. |
+| `href` | `string` | `undefined` | If provided, the button renders as an `<a>` tag. |
+| `...rest` | `any` | - | Any standard HTML attributes (class, onClick, etc.). |

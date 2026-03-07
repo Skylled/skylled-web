@@ -1,0 +1,108 @@
+---
+title: "Theme Variables"
+description: "Customize global colors, spacing, and radius using theme.css."
+---
+
+The core design tokens for the application are defined in `src/styles/theme.css`. We use CSS variables (custom properties) to manage colors for both Light and Dark modes.
+
+## File Location
+`src/styles/theme.css`
+
+## Usage
+
+This file defines the root variables. To customize your brand's primary color, simply modify the hex code in the `:root` (for light mode) and `.dark` (for dark mode) blocks.
+
+### Code Example
+
+```css
+/* src/styles/theme.css */
+
+/* Light Theme */
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --muted: #f1f5f9;
+  
+  /* CHANGE THIS to update your primary brand color in Light Mode */
+  --color-primary: #00008B; 
+}
+
+/* Dark Theme */
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  
+  /* CHANGE THIS to update your primary brand color in Dark Mode */
+  --color-primary: #60a5fa; 
+}
+```
+
+## Adding New Variables
+
+You can add any new global variable here and then use it in your Tailwind classes or custom CSS.
+
+```css
+:root {
+    --my-new-color: #ff00ff;
+}
+```
+
+Then use it in `tailwind.config` or standard CSS:
+```css
+.my-element {
+    color: var(--my-new-color);
+}
+```
+
+## Logo Configuration
+
+You can configure the logo strategy in `src/site.config.ts`. This allows you to control how the logo behaves in Dark Mode.
+
+### Configuration Object
+
+```typescript
+// src/site.config.ts
+export const siteConfig = {
+  // ...
+  logo: {
+    src: '/logo.svg',       // Path to your default (light mode) logo
+    srcDark: '/logo.svg',   // (Optional) Path to dark mode logo (used for 'switch')
+    alt: 'Brand Name',      // Alt text
+    strategy: 'invert',     // Strategy: 'invert' | 'switch' | 'static'
+  },
+  // ...
+};
+```
+
+### Strategies
+
+| Strategy | Description | Best For |
+| :--- | :--- | :--- |
+| **`invert`** | Applies a CSS `invert(1)` filter to the logo in Dark Mode. | Simple black/monochrome logos that turn white when inverted. |
+| **`switch`** | Renders a different image source (`srcDark`) in Dark Mode. | Logos that have specific colors for dark mode (not just inversion). |
+| **`static`** | Uses the same `src` for both modes with no changes. | Logos that work well on both light and dark backgrounds. |
+
+### Examples
+
+**1. Invert (Default)**
+```typescript
+strategy: 'invert'
+// Result: Light Mode = Black Logo, Dark Mode = White Logo (via CSS)
+```
+
+**2. Switch**
+```typescript
+logo: {
+  src: '/logo-light.png',
+  srcDark: '/logo-dark.png',
+  strategy: 'switch'
+}
+// Result: Light Mode = logo-light.png, Dark Mode = logo-dark.png
+```
+
+**3. Static**
+```typescript
+strategy: 'static'
+// Result: Light Mode = Logo, Dark Mode = Logo (No change)
+```
+

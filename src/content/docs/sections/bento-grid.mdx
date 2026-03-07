@@ -1,0 +1,108 @@
+---
+title: 'Bento Grid'
+description: 'Modern, masonry-style grid layout.'
+order: 7
+---
+import BentoGrid from '~/components/sections/BentoGrid.astro';
+import BentoItem from '~/components/ui/BentoItem.astro';
+import { Users, FileText, Github, Heart, Video, Trophy, Mail } from 'lucide-react';
+
+The **BentoGrid** provides a trendy, asymmetric layout inspired by bento boxes. It is perfect for showcasing features, portfolio items, or services in a visually engaging way.
+
+## Usage
+
+```astro
+import BentoGrid from '~/components/sections/BentoGrid.astro';
+import BentoItem from '~/components/ui/BentoItem.astro';
+import { Globe, Cpu } from 'lucide-react';
+
+<BentoGrid title="My Features" description="Check out these cool things.">
+  
+  <BentoItem class="md:col-span-2">
+    <Globe />
+    <h3>Global Reach</h3>
+  </BentoItem>
+
+  <BentoItem class="md:row-span-2">
+    <Cpu />
+    <h3>High Performance</h3>
+  </BentoItem>
+
+</BentoGrid>
+```
+
+## Example
+
+<div class="border border-foreground/10 rounded-xl mb-8 bg-background overflow-hidden relative">
+  <div class="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none"></div>
+  <div class="scale-90 origin-top -mb-10 sm:-mb-24">
+    <BentoGrid title="Community & Learning" description="Join thousands of developers building the future.">
+      {/* Item 1: Wide */}
+      <BentoItem class="md:col-span-2 group">
+        <div class="relative z-10">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 text-purple-500">
+              <Users />
+          </div>
+          <h3 class="text-2xl font-bold mb-2">Vibrant Community</h3>
+          <p class="text-muted-foreground">Connect with over 10,000 developers on Discord. Share tips, get help, and collaborate.</p>
+        </div>
+      </BentoItem>
+      
+      {/* Item 2: Tall */}
+      <BentoItem class="md:row-span-2 group">
+         <div class="relative z-20 h-full flex flex-col justify-end">
+            <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center mb-4 text-pink-500">
+                <Heart />
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Open Source</h3>
+            <p class="text-muted-foreground text-sm">Free to contribute.</p>
+         </div>
+      </BentoItem>
+
+      {/* Item 3: Standard */}
+      <BentoItem class="flex flex-col justify-center text-center group">
+        <div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <FileText />
+        </div>
+        <h3 class="text-lg font-bold">Rich Docs</h3>
+      </BentoItem>
+
+      {/* Item 4: Standard */}
+      <BentoItem class="flex flex-col justify-center text-center group">
+         <div class="w-12 h-12 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <Video />
+        </div>
+        <h3 class="text-lg font-bold">Video Tutorials</h3>
+      </BentoItem>
+
+       {/* Item 5: Wide */}
+      <BentoItem class="md:col-span-2 group">
+         <div class="flex items-center gap-6 h-full">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0 text-amber-500">
+                <Trophy size={32} />
+            </div>
+            <div>
+                 <h3 class="text-xl font-bold mb-1">Weekly Showcase</h3>
+                 <p class="text-muted-foreground text-sm">See the best projects built with our template.</p>
+            </div>
+        </div>
+      </BentoItem>
+
+    </BentoGrid>
+  </div>
+</div>
+
+## Props
+
+### BentoGrid
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `title` | `string` | The section heading. |
+| `description` | `string` | A short description text. |
+
+### BentoItem
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `class` | `string` | `undefined` | styled-class for grid positioning (e.g. `col-span-2`, `row-span-2`). |

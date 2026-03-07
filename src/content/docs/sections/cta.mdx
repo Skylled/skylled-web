@@ -1,0 +1,62 @@
+---
+title: 'CTA'
+description: 'Call to Action section to convert visitors.'
+order: 16
+---
+import CTA from '~/components/sections/CTA.astro';
+
+The **CTA** (Call to Action) component is designed to drive user conversions at the end of a page or section.
+
+## Usage
+
+```astro
+import CTA from '~/components/sections/CTA.astro';
+
+<CTA 
+  title="Ready to get started?"
+  description="Join thousands of happy users today."
+  primaryBtnText="Sign Up"
+  primaryBtnLink="/signup"
+  secondaryBtnText="Learn More"
+  secondaryBtnLink="/about"
+/>
+```
+
+## Variants
+
+### Default
+The default variant occupies the full width with a prominent background glow.
+
+<CTA 
+  title="Build faster today" 
+  description="Stop wasting time on boilerplate. Use our templates to ship your next project in record time."
+  primaryBtnText="Get Started"
+  primaryBtnLink="#"
+  secondaryBtnText="View Documentation"
+  secondaryBtnLink="#"
+/>
+
+### Boxed
+The `boxed` variant is contained within a card, useful for placing inside other layouts.
+
+<CTA 
+  variant="boxed"
+  title="Ready to Launch?" 
+  description="Get started with our premium templates."
+  primaryBtnText="Buy Now"
+  primaryBtnLink="#"
+  secondaryBtnText="Learn More"
+  secondaryBtnLink="#"
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `'default' \| 'boxed'` | `'default'` | Layout style of the section. |
+| `title` | `string` | `undefined` | Heading text. |
+| `description` | `string` | `undefined` | Subtext description. |
+| `primaryBtnText` | `string` | `undefined` | Text for the primary button. |
+| `primaryBtnLink` | `string` | `undefined` | URL for the primary button. |
+| `secondaryBtnText` | `string` | `undefined` | Text for the secondary button. |
+| `secondaryBtnLink` | `string` | `undefined` | URL for the secondary button. |

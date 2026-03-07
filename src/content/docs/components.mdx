@@ -1,0 +1,188 @@
+---
+title: 'Components'
+description: 'Explore the complete set of premium components designed for Cooper.'
+order: 1
+---
+import Button from '~/components/ui/Button.astro';
+import Badge from '~/components/ui/Badge.astro';
+import Card from '~/components/ui/Card.astro';
+import Heading from '~/components/ui/Heading.astro';
+import Text from '~/components/ui/Text.astro';
+import Grid from '~/components/ui/Grid.astro';
+import Container from '~/components/ui/Container.astro';
+import Section from '~/components/layout/Section.astro';
+import { ArrowRight, Check, Zap, Shield, Star } from 'lucide-react';
+
+This overview showcases the building blocks available for creating stunning pages.
+
+## Core UI
+
+The fundamental elements of your user interface.
+
+### Buttons
+
+Buttons come in various styles to suit different needs.
+
+<div class="p-6 border border-foreground/10 rounded-xl bg-background/50 backdrop-blur-sm flex flex-wrap gap-4 items-center mb-8">
+  <Button>Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="icon"><Zap size={18} /></Button>
+</div>
+
+```astro
+<Button>Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="icon"><Icon /></Button>
+```
+
+#### Sizes
+<div class="p-6 border border-foreground/10 rounded-xl bg-background/50 backdrop-blur-sm flex flex-wrap gap-4 items-center mb-8">
+    <Button size="sm">Small</Button>
+    <Button size="md">Medium</Button>
+    <Button size="lg">Large</Button>
+</div>
+
+
+### Badges
+
+Use badges to highlight status, tags, or categories.
+
+<div class="p-6 border border-foreground/10 rounded-xl bg-background/50 backdrop-blur-sm flex flex-wrap gap-4 items-center mb-8">
+  <Badge>Default</Badge>
+  <Badge variant="outline">Outline</Badge>
+  <Badge variant="secondary">Secondary</Badge>
+  <Badge variant="accent" class="text-green-600 bg-green-500/10 border-green-600/20">Success</Badge>
+</div>
+
+```astro
+<Badge>Default</Badge>
+<Badge variant="outline">Outline</Badge>
+<Badge variant="secondary">Secondary</Badge>
+<Badge variant="accent" class="...">Custom</Badge>
+```
+
+### Cards
+
+Versatile containers for content.
+
+<div class="grid md:grid-cols-2 gap-6 mb-8">
+    <Card>
+        <Heading level={4} class="mb-2">Basic Card</Heading>
+        <Text small>A simple card container with padding and rounded corners.</Text>
+    </Card>
+    <Card href="#" class="group">
+        <Heading level={4} class="mb-2 flex items-center gap-2">
+            Interactive Card <ArrowRight size={16} class="group-hover:translate-x-1 transition-transform"/>
+        </Heading>
+        <Text small>Pass an `href` prop to make the card clickable and add hover effects.</Text>
+    </Card>
+</div>
+
+```astro
+<Card href="/somewhere">
+  <Heading level={4}>Interactive Card</Heading>
+  <Text>Content goes here...</Text>
+</Card>
+```
+
+## Typography
+
+Consistent typography utilities for headings and body text.
+
+<div class="p-8 border border-foreground/10 rounded-xl bg-background/50 space-y-6 mb-8">
+    <div>
+        <Heading level={1}>Heading 1</Heading>
+        <span class="text-xs text-muted-foreground font-mono">level=1 (h1)</span>
+    </div>
+    <div>
+        <Heading level={2}>Heading 2</Heading>
+        <span class="text-xs text-muted-foreground font-mono">level=2 (h2)</span>
+    </div>
+    <div>
+        <Heading level={3}>Heading 3</Heading>
+        <span class="text-xs text-muted-foreground font-mono">level=3 (h3)</span>
+    </div>
+    <div>
+        <Text variant="lead">Lead Paragraph</Text>
+        <Text>Standard body text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+        <Text small>Small text for captions or secondary information.</Text>
+    </div>
+</div>
+
+## Layout
+
+Helpers for structuring your page.
+
+### Container & Grid
+
+<div class="p-4 border border-blue-500/20 bg-blue-500/5 rounded-xl mb-8">
+    <Container>
+        <div class="border border-dashed border-blue-500 p-2 text-center text-xs text-blue-500 mb-4">Container (Centers content associated with max-width)</div>
+        <Grid cols={3} gap={4}>
+             <div class="bg-blue-500/20 p-4 rounded text-center text-xs">Grid Item 1</div>
+             <div class="bg-blue-500/20 p-4 rounded text-center text-xs">Grid Item 2</div>
+             <div class="bg-blue-500/20 p-4 rounded text-center text-xs">Grid Item 3</div>
+        </Grid>
+    </Container>
+</div>
+
+```astro
+<Container>
+    <Grid cols={3}>
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+    </Grid>
+</Container>
+```
+
+## Feature Components
+
+Pre-built components for common marketing sections.
+
+### Feature Items
+
+<div class="grid md:grid-cols-2 gap-4 mb-8">
+  <div class="p-4 border border-foreground/10 rounded-xl">
+    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-3">
+        <Zap size={20} />
+    </div>
+    <Heading level={4} class="text-base mb-1">Fast Performance</Heading>
+    <Text small>Optimized for Core Web Vitals out of the box.</Text>
+  </div>
+   <div class="p-4 border border-foreground/10 rounded-xl">
+    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-3">
+        <Shield size={20} />
+    </div>
+    <Heading level={4} class="text-base mb-1">Secure by Default</Heading>
+    <Text small>Built-in security best practices.</Text>
+  </div>
+</div>
+
+### Stats
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 p-6 bg-foreground/5 rounded-xl">
+    <div class="text-center">
+        <div class="text-2xl font-bold text-primary">100+</div>
+        <div class="text-xs text-muted-foreground uppercase tracking-wider font-bold mt-1">Components</div>
+    </div>
+     <div class="text-center">
+        <div class="text-2xl font-bold text-primary">10x</div>
+        <div class="text-xs text-muted-foreground uppercase tracking-wider font-bold mt-1">Faster</div>
+    </div>
+</div>
+
+## Developer Experience
+
+### CopyButton
+
+<div class="flex items-center gap-4 mb-8">
+    <div class="relative group">
+        <div class="bg-black text-white px-4 py-2 rounded-lg font-mono text-sm">npm install astro</div>
+    </div>
+    <span class="text-sm text-muted-foreground">Used automatically in code blocks!</span>
+</div>

@@ -1,0 +1,90 @@
+---
+title: 'Pricing Table'
+description: 'Present your pricing plans clearly.'
+order: 17
+---
+import PricingTable from '~/components/sections/PricingTable.astro';
+import PricingPlan from '~/components/sections/PricingPlan.astro';
+
+The **PricingTable** component arranges `PricingPlan` items in a responsive grid.
+
+## Usage
+
+```astro
+import PricingTable from '~/components/sections/PricingTable.astro';
+import PricingPlan from '~/components/sections/PricingPlan.astro';
+
+<PricingTable>
+  <PricingPlan 
+    name="Basic" 
+    price="$29" 
+    features={['Feature 1', 'Feature 2']} 
+    cta="Get Started"
+  />
+  <PricingPlan 
+    name="Pro" 
+    price="$99" 
+    features={['All Basic features', 'Feature 3']} 
+    popular
+    cta="Buy Now"
+  />
+</PricingTable>
+```
+
+## Example
+
+<PricingTable>
+  <PricingPlan
+    name="Starter"
+    price="Free"
+    description="For personal projects"
+    features={[
+      "5 Projects",
+      "Community Support",
+      "1GB Storage"
+    ]}
+    cta="Start Free"
+  />
+  <PricingPlan
+    name="Pro"
+    price="$29"
+    description="For serious developers"
+    features={[
+      "Unlimited Projects",
+      "Priority Support",
+      "10GB Storage",
+      "Custom Domain"
+    ]}
+    popular
+    cta="Get Pro"
+  />
+  <PricingPlan
+    name="Enterprise"
+    price="Custom"
+    description="For large teams"
+    features={[
+      "Unlimited Everything",
+      "Dedicated Support",
+      "SSO & Audit Logs",
+      "SLA"
+    ]}
+    cta="Contact Us"
+  />
+</PricingTable>
+
+## Props
+
+### PricingTable
+
+This component acts as a grid wrapper and accepts `children`.
+
+### PricingPlan
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | `string` | Required | The name of the plan. |
+| `price` | `string` | Required | The price display (e.g. "$29"). |
+| `description` | `string` | `undefined` | A short description of the plan target. |
+| `features` | `string[]` | `[]` | List of features included in the plan. |
+| `cta` | `string` | Required | Text for the CTA button. |
+| `popular` | `boolean` | `false` | Highlights the plan as recommended. |

@@ -1,0 +1,136 @@
+---
+import { Rocket, Bug, Zap, Layers, Shield, CalendarDays } from 'lucide-react';
+
+interface Props {
+  version: string;
+  title: string;
+  pubDate: Date;
+  type: 'major' | 'feature' | 'security' | 'fix' | 'improvement' | 'planned' | 'other';
+  isSecurity?: boolean;
+  detailsUrl?: string;
+  migrationUrl?: string;
+  body: string;
+  lang?: string;
+}
+
+import { defaultLang } from '~/i18n/ui';
+import { siteConfig } from '~/site.config';
+
+const { version, title, pubDate, type, isSecurity = false, body, detailsUrl, migrationUrl, lang = defaultLang } = Astro.props;
+
+const dateLocale = siteConfig.dateOptions?.localeMapping?.[lang] || lang;
+
+import CopyButton from '~/components/common/CopyButton.astro';
+import { ArrowRight, FileText } from 'lucide-react';
+
+const copyText = `---
+version: "${version}"
+title: "${title}"
+description: "${title}"
+pubDate: ${pubDate.toISOString().split('T')[0]}
+type: "${type}"
+${isSecurity ? 'isSecurity: true\n' : ''}---
+
+${body}`;
+
+const icons: Record<string, any> = {
+  major: Rocket,
+  feature: Rocket,
+  security: Shield,
+  fix: Bug,
+  improvement: Zap,
+  planned: CalendarDays,
+  other: Layers
+};
+
+const Icon = icons[type] || Layers;
+
+const colors = {
+    major: 'text-emerald-400 border-emerald-400/20 bg-emerald-400/10',
+    feature: 'text-blue-400 border-blue-400/20 bg-blue-400/10',
+    security: 'text-amber-400 border-amber-400/20 bg-amber-400/10',
+    fix: 'text-red-400 border-red-400/20 bg-red-400/10',
+    improvement: 'text-indigo-400 border-indigo-400/20 bg-indigo-400/10',
+    planned: 'text-purple-400 border-purple-400/20 bg-purple-400/10',
+    other: 'text-foreground/40 border-foreground/10 bg-foreground/5',
+};
+
+const labels = {
+    major: 'Major Version',
+    feature: 'Feature',
+    security: 'Security Patch',
+    fix: 'Bug Fix',
+    improvement: 'Improvement',
+    planned: 'Planned',
+    other: 'Other'
+};
+
+const typeLabel = labels[type] || type.charAt(0).toUpperCase() + type.slice(1);
+---
+
+<div id={version.replace(/\./g, '-')} class="relative pl-12 pb-16 last:pb-0 group scroll-mt-24">
+    {/* Timeline Line */}
+    <div class="absolute left-[23px] top-0 bottom-0 w-px bg-foreground/10 group-last:bg-linear-to-b group-last:from-foreground/10 group-last:to-transparent"></div>
+    
+    {/* Timeline Point */}
+    <div class="absolute left-0 top-0 w-12 h-12 flex items-center justify-center">
+        <div class="relative flex items-center justify-center">
+            <div class={`w-10 h-10 rounded-xl border border-foreground/10 z-10 relative bg-background flex items-center justify-center group-hover:scale-110 group-hover:border-primary/50 transition-all duration-500 shadow-lg`}>
+                <Icon className={`w-5 h-5 ${colors[type].split(' ')[0]}`} />
+            </div>
+            <div class="absolute inset-0 bg-primary/20 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+    </div>
+
+    <div class="relative">
+        <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-bold font-display">{version}</span>
+                <div class="flex flex-wrap gap-2">
+                    <span class={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full border ${colors[type]}`}>
+                        {typeLabel}
+                    </span>
+                    {isSecurity && type !== 'security' && (
+                        <span class="flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full border border-amber-400/20 bg-amber-400/10 text-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.1)]">
+                            <Shield size={12} fill="currentColor" fill-opacity="0.1" />
+                            Security Patch Included
+                        </span>
+                    )}
+                </div>
+            </div>
+            <div class="hidden md:block w-px h-4 bg-foreground/10"></div>
+            <time class="text-sm text-foreground/50">
+                {pubDate.toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+        </div>
+
+        <div class="bg-foreground/2 border border-foreground/10 rounded-2xl p-8 backdrop-blur-sm hover:border-primary/20 transition-all group-hover:bg-foreground/3 relative">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold">{title}</h3>
+                <div class="pl-4">
+                    <CopyButton text={copyText} />
+                </div>
+            </div>
+            <div class="prose prose-invert prose-p:text-foreground/70 prose-li:text-foreground/70 prose-strong:text-foreground max-w-none">
+                <slot />
+            </div>
+            
+             {(detailsUrl || migrationUrl) && (
+                <div class="mt-6 flex flex-wrap gap-3 pt-6 border-t border-foreground/5">
+                    {detailsUrl && (
+                        <a href={detailsUrl} class="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">
+                            Read Full Release Notes
+                            <ArrowRight size={14} />
+                        </a>
+                    )}
+                    {migrationUrl && (
+                        <a href={migrationUrl} class="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg border border-foreground/10 hover:border-foreground/20 hover:bg-foreground/5 transition-colors">
+                            <FileText size={14} />
+                            Migration Guide
+                        </a>
+                    )}
+                </div>
+            )}
+        </div>
+    </div>
+</div>

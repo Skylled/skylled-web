@@ -1,0 +1,85 @@
+---
+interface Props {
+    value: string;
+    label: string;
+}
+const { value, label } = Astro.props;
+
+// Simple parser to extract number and suffix
+// e.g. "10k+" -> num: 10, suffix: "k+"
+// e.g. "99.9%" -> num: 99.9, suffix: "%"
+const match = value.toString().match(/^([\d.,]+)(.*)$/);
+const numValue = match ? parseFloat(match[1].replace(/,/g, '')) : 0;
+const suffix = match ? match[2] : '';
+const shouldAnimate = match !== null && !isNaN(numValue);
+---
+<div class="flex flex-col items-center justify-center p-4">
+    <div 
+        class="text-4xl md:text-5xl font-bold text-primary mb-2 font-display tabular-nums"
+        data-stat-value={shouldAnimate ? numValue : undefined}
+        data-stat-suffix={suffix}
+    >
+        {shouldAnimate ? 0 : value}{shouldAnimate ? suffix : ''}
+    </div>
+    <div class="text-muted-foreground font-medium">{label}</div>
+</div>
+
+<script>
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5
+    };
+
+    const animateCountUp = (el: HTMLElement) => {
+        const target = parseFloat(el.dataset.statValue || '0');
+        const suffix = el.dataset.statSuffix || '';
+        const duration = 2000; // 2 seconds
+        const start = 0;
+        const startTime = performance.now();
+
+        const easeOutQuart = (x: number): number => {
+            return 1 - Math.pow(1 - x, 4);
+        };
+
+        const update = (currentTime: number) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Format number (keep decimals if target has them)
+            const current = start + (target - start) * easeOutQuart(progress);
+            
+            // Determine decimal places based on target input (e.g. 99.9 vs 10)
+            const isFloat = target % 1 !== 0;
+            const formatted = isFloat ? current.toFixed(1) : Math.floor(current).toString();
+
+            el.textContent = `${formatted}${suffix}`;
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                 el.textContent = `${target}${suffix}`; // Ensure final value is exact
+            }
+        };
+
+        requestAnimationFrame(update);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target as HTMLElement;
+                if (el.dataset.statValue) {
+                    animateCountUp(el);
+                    // Stop observing once triggered
+                    observer.unobserve(el);
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Initialize on all stat items
+    document.querySelectorAll('[data-stat-value]').forEach(el => {
+        observer.observe(el);
+    });
+</script>

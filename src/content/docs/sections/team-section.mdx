@@ -1,0 +1,66 @@
+---
+title: 'Team Section'
+description: 'Showcase your team members.'
+order: 18
+---
+import TeamSection from '~/components/sections/TeamSection.astro';
+import TeamMember from '~/components/ui/TeamMember.astro';
+
+The **Team component** allows you to display your team members in a responsive grid.
+
+## Usage
+
+```astro
+import TeamSection from '~/components/sections/TeamSection.astro';
+import TeamMember from '~/components/ui/TeamMember.astro';
+
+<TeamSection title="Meet the Team" description="The people behind the magic.">
+  <TeamMember 
+    name="John Doe" 
+    role="CEO" 
+    image="https://example.com/john.jpg" 
+  />
+</TeamSection>
+```
+
+## Example
+
+<TeamSection title="Leadership" description="Guided by experience and passion.">
+  <TeamMember 
+    name="Sarah Connor" 
+    role="Founder & CEO" 
+    image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80"
+  />
+  <TeamMember 
+    name="John Smith" 
+    role="CTO" 
+    image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80"
+  />
+  <TeamMember 
+    name="Emily Chen" 
+    role="Lead Designer" 
+    image="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80"
+  />
+  <TeamMember 
+    name="Michael Brown" 
+    role="Head of Product" 
+    image="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80"
+  />
+</TeamSection>
+
+## Props
+
+### TeamSection
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | `undefined` | Optional heading for the section. |
+| `description` | `string` | `undefined` | Optional subtext for the section. |
+
+### TeamMember
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | `string` | Required | The name of the team member. |
+| `role` | `string` | Required | The job title or role. |
+| `image` | `string` | Required | URL of the profile picture. |

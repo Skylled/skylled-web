@@ -1,0 +1,31 @@
+---
+title: 'RSS Feeds'
+description: 'Subscribing to content updates via RSS.'
+order: 3
+---
+
+The boilerplate generates a comprehensive RSS feed at `/rss.xml`, allowing users to subscribe to your latest content using any standard feed reader.
+
+## Content Aggregation
+
+The feed automatically aggregates content from multiple sources:
+
+1.  **Blog Posts**: Standard articles from `src/content/blog`.
+2.  **Changelog Entries**: Product updates from `src/content/changelog`.
+
+## Deep Linking
+
+Changelog entries in the RSS feed include intelligent deep links. Clicking a changelog item in an RSS reader will take the user directly to the specific version section on your Changelog page (e.g., `/changelog#v2-0-0`), rather than just the top of the page.
+
+## Configuration
+
+The feed generation logic is located in `src/pages/rss.xml.js`. It uses the global site configuration for metadata:
+
+```javascript
+// src/site.config.ts
+export const siteConfig = {
+  name: 'Cooper',
+  description: 'Premium Astro Boilerplate',
+  // ...
+};
+```

@@ -1,0 +1,47 @@
+---
+title: 'Timeline'
+description: 'Visual vertical timeline for history or roadmaps.'
+order: 8
+---
+import Timeline from '~/components/sections/Timeline.astro';
+
+The **Timeline** component visualizes a sequence of events.
+
+## Usage
+
+```astro
+import Timeline from '~/components/sections/Timeline.astro';
+
+const items = [
+  { date: '2023', title: 'Founded', description: 'We started our journey.' },
+  { date: '2024', title: 'Growth', description: 'Reached 100k users.' }
+];
+
+<Timeline items={items} />
+```
+
+## Example
+
+<Timeline items={[
+  { 
+    date: 'Q1 2024', 
+    title: 'Project Kickoff', 
+    description: 'Initial planning and design phase completed.' 
+  },
+  { 
+    date: 'Q2 2024', 
+    title: 'Beta Launch', 
+    description: 'First release to early access users.' 
+  },
+  { 
+    date: 'Q3 2024', 
+    title: 'Public Release', 
+    description: 'Global availability and marketing campaign.' 
+  }
+]} />
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `TimelineItem[]` | Required | Array of objects with `date`, `title`, and `description`. |

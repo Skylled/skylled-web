@@ -1,0 +1,31 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHeader from '~/components/layout/PageHeader.astro';
+import BlogCard from '~/components/blog/BlogCard.astro';
+import Container from '~/components/ui/Container.astro';
+import Grid from '~/components/ui/Grid.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter(post => post.id.startsWith('en/'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title="Blog - Skylled" description="Articles and thoughts from Kyle.">
+  <PageHeader title="Blog" description="Articles and thoughts." />
+
+  <Container as="section" class="pb-24">
+    <Grid cols={3}>
+      {posts.map(post => (
+        <BlogCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          heroImage={post.data.heroImage}
+          slug={'/blog/' + post.id.replace(/^en\//, '')}
+          isVideo={post.data.isVideo}
+        />
+      ))}
+    </Grid>
+  </Container>
+</Layout>

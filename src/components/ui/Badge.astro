@@ -1,0 +1,24 @@
+---
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
+
+interface Props {
+  variant?: 'default' | 'outline' | 'secondary' | 'accent' | 'destructive';
+  class?: string;
+}
+
+const { variant = 'default', class: className } = Astro.props;
+
+const variants = {
+  default: "bg-background/80 text-foreground border border-foreground/10 shadow-sm backdrop-blur-md",
+  outline: "bg-transparent border border-foreground/10 text-foreground",
+  secondary: "bg-foreground/5 text-foreground border border-foreground/10",
+  accent: "bg-blue-600/10 text-blue-700 dark:text-blue-300 border border-blue-600/20",
+  destructive: "bg-red-600/10 text-red-700 dark:text-red-400 border border-red-600/20",
+};
+
+---
+
+<span class={twMerge(clsx("inline-flex items-center px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm", variants[variant], className))}>
+  <slot />
+</span>

@@ -1,0 +1,30 @@
+---
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+import { defaultLang } from '~/i18n/ui';
+import { useTranslations } from '~/i18n/utils';
+
+const { title, description } = Astro.props;
+const { lang = defaultLang } = Astro.params;
+const t = useTranslations(lang);
+---
+<section class="py-24 border-y border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+        {title && (
+            <div class="mb-12 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-display font-bold mb-4">{title}</h2>
+                {description && <p class="text-muted-foreground">{description}</p>}
+            </div>
+        )}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <slot />
+        </div>
+        
+        <div class="text-center mt-12">
+             <p class="text-xs text-muted-foreground/50">{t['stats.disclaimer']}</p>
+        </div>
+    </div>
+</section>

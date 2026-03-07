@@ -1,0 +1,51 @@
+---
+title: 'Logo Cloud'
+description: 'Display social proof with partner logos.'
+order: 21
+---
+import LogoCloud from '~/components/sections/LogoCloud.astro';
+
+The **LogoCloud** displays a grid of partner or client logos. 
+
+> **Note**: This component currently fetches data from the `partners` content collection or falls back to a default list defined in the component. To customize it, please edit `src/components/LogoCloud.astro` or add entries to your `partners` collection.
+
+## Usage
+
+```astro
+import LogoCloud from '~/components/sections/LogoCloud.astro';
+
+<LogoCloud 
+  title="Trusted by amazing companies" 
+  logos={[
+    { name: 'Company A', src: '/path/to/logo.png' },
+    { name: 'Company B', src: '/path/to/logo.png' }
+  ]}
+/>
+```
+
+## Example
+
+<LogoCloud 
+  title="Our Partners" 
+  logos={[
+    { name: 'Vercel', src: 'https://assets.vercel.com/image/upload/v1538361091/repositories/vercel/logo.png', description: 'Deployment Platform' },
+    { name: 'Astro', src: 'https://astro.build/assets/press/astro-icon-dark.svg', description: 'Web Framework' },
+    { name: 'Google', src: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg', description: 'Search Giant' }
+  ]}
+/>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | `'Trusted by...'` | Optional heading over the logos. |
+| `logos` | `Logo[]` | `[]` | Array of logo objects. |
+
+### Logo Interface
+```ts
+interface Logo {
+  name: string;
+  src: string;
+  description?: string;
+}
+```

@@ -1,0 +1,25 @@
+/* Light Theme (Default) */
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --muted: #f1f5f9;
+  --muted-foreground: #334155; /* Slate 700 - solid contrast for secondary text */
+  --primary-foreground: #ffffff;
+}
+
+/* Dark Theme */
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --color-primary: #60a5fa;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --primary-foreground: #000000;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}

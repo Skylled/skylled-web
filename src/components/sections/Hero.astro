@@ -1,0 +1,88 @@
+---
+import { ui, defaultLang } from '~/i18n/ui';
+import { useTranslations } from '~/i18n/utils';
+import Button from '~/components/ui/Button.astro';
+import Badge from '~/components/ui/Badge.astro';
+
+interface Props {
+  badge?: string;
+  title?: string;
+  highlight?: string;
+  description?: string;
+  primaryCta?: { text: string; href: string };
+  secondaryCta?: { text: string; href: string };
+}
+
+const { lang = defaultLang } = Astro.params;
+const t = useTranslations(lang);
+
+const {
+  badge = t['hero.badge'],
+  title = t['hero.title'],
+  highlight = t['hero.highlight'],
+  description = t['hero.subtitle'],
+  primaryCta = { text: t['hero.getStarted'], href: "/docs" },
+  secondaryCta = { text: t['hero.learnMore'], href: "/docs/overview" }
+} = Astro.props;
+---
+
+<section class="min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-20 bg-background">
+  <div class="absolute inset-0 z-0 opacity-40">
+     <div class="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-blue-900/40 rounded-full blur-[128px] animate-pulse"></div>
+     <div class="absolute bottom-[20%] right-[20%] w-[500px] h-[500px] bg-indigo-900/40 rounded-full blur-[128px] animate-pulse" style="animation-delay: 2s;"></div>
+  </div>
+
+  <div class="container mx-auto px-6 relative z-10 text-center">
+    <div class="hero-content opacity-0 translate-y-5">
+      <Badge class="mb-6 border-foreground/10">
+        {badge}
+      </Badge>
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 text-foreground">
+        {title} <br />
+        <span class="text-primary">
+           {highlight}
+        </span>
+      </h1>
+      <p class="text-xl text-foreground/70 max-w-2xl mx-auto mb-10">
+        {description}
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <Button 
+          href={primaryCta.href} 
+          class="px-8 py-4 rounded-full text-base"
+          aria-label={`${primaryCta.text} - ${title} ${highlight}`}
+        >
+          {primaryCta.text}
+        </Button>
+        <Button 
+          href={secondaryCta.href}
+          variant="secondary"
+          class="px-8 py-4 rounded-full text-base backdrop-blur-sm"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${secondaryCta.text} about our features`}
+        >
+          {secondaryCta.text}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-content {
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

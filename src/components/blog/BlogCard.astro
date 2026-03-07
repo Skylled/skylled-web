@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import { ui, defaultLang } from '~/i18n/ui';
+import { isRtl, useTranslations } from '~/i18n/utils';
+import Card from '~/components/ui/Card.astro';
+import Badge from '~/components/ui/Badge.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  slug: string;
+  heroImage?: ImageMetadata;
+  isVideo?: boolean;
+}
+
+const { title, description, pubDate, slug, heroImage, isVideo = false } = Astro.props;
+const { lang = defaultLang } = Astro.params;
+const t = useTranslations(lang);
+
+const dateString = pubDate.toLocaleDateString(lang, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<Card href={slug} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
+  <div class="relative aspect-video w-full overflow-hidden bg-muted">
+    {heroImage ? (
+       <Image 
+         src={heroImage} 
+         alt={title} 
+         class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+         width={600}
+         densities={[1.5, 2]}
+       />
+    ) : (
+        <div class="h-full w-full flex items-center justify-center bg-black/5 dark:bg-white/5">
+            <span class="text-4xl">📝</span>
+        </div>
+    )}
+
+    {isVideo && (
+      <div class="absolute top-2 right-2 z-10">
+        <Badge variant="destructive" class="shadow-sm">
+          Video
+        </Badge>
+      </div>
+    )}
+    
+    <div class="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+  </div>
+
+  <div class="p-6">
+    <div class="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+      <time datetime={pubDate.toISOString()}>{dateString}</time>
+      <span>•</span>
+      <span>{t['nav.blog']}</span>
+    </div>
+    
+    <h3 class="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
+      {title}
+    </h3>
+    
+    <p class="text-muted-foreground text-sm line-clamp-2">
+      {description}
+    </p>
+
+    <div class={`mt-4 flex items-center gap-2 text-sm font-medium text-primary opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${isRtl(lang) ? 'translate-x-2' : '-translate-x-2'}`}>
+      <span>{t['blog.readMore']}</span> 
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={`w-4 h-4 ${isRtl(lang) ? 'rotate-180' : ''}`}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </div>
+  </div>
+</Card>

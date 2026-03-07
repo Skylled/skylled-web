@@ -1,0 +1,8 @@
+
+# Wrangler Ignore
+# By existing, this file overrides .gitignore for Wrangler deployments.
+# We want to upload everything in 'dist', so we largely leave this empty
+# or just exclude things we definitely don't want if they ever ended up in dist.
+
+node_modules
+.DS_Store

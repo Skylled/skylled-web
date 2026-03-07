@@ -1,0 +1,52 @@
+---
+title: 'Content Section'
+description: 'A flexible section for displaying text and images.'
+order: 13
+---
+import ContentSection from '~/components/sections/ContentSection.astro';
+import Button from '~/components/ui/Button.astro';
+
+The **ContentSection** component is ideal for detailing specific features, telling a story, or presenting complex information with an accompanying image.
+
+## Usage
+
+```astro
+import ContentSection from '~/components/sections/ContentSection.astro';
+import Button from '~/components/ui/Button.astro';
+
+<ContentSection 
+  title="Our Mission" 
+  image="https://example.com/image.jpg"
+>
+  <p>We believe in open source software.</p>
+  <Button>Learn More</Button>
+</ContentSection>
+```
+
+## Example
+
+<ContentSection 
+  title="Empowering Developers" 
+  image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80"
+  imagePosition="left"
+>
+  <p class="text-lg">
+    Build faster, clearer, and more robust applications with our comprehensive template suite.
+  </p>
+  <ul class="list-disc list-inside space-y-2 mb-6">
+    <li>Pre-built UI components</li>
+    <li>Optimized for performance</li>
+    <li>Accessible by default</li>
+  </ul>
+  <Button variant="primary">Get Started</Button>
+</ContentSection>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | Required | The main heading of the section. |
+| `image` | `string` | Required | URL of the accompanying image. |
+| `imagePosition` | `'left' \| 'right'` | `'right'` | Position of the image relative to the content. |
+| `imageAlt` | `string` | `'Section image'` | Alt text for the image. |
+| `id` | `string` | `undefined` | Optional ID for deep linking. |

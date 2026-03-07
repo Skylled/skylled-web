@@ -1,0 +1,46 @@
+---
+import { ChevronRight, Home } from 'lucide-react';
+
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+  current?: boolean;
+}
+
+interface Props {
+  items?: BreadcrumbItem[]; // Optional, otherwise auto-generated (simplified)
+}
+
+const { items = [] } = Astro.props;
+---
+
+<nav class="flex" aria-label="Breadcrumb">
+  <ol role="list" class="flex items-center space-x-2">
+    <li>
+      <div>
+        <a href="/" class="text-muted-foreground hover:text-primary transition-colors">
+          <Home className="h-4 w-4 shrink-0" />
+          <span class="sr-only">Home</span>
+        </a>
+      </div>
+    </li>
+    {items.map((item) => (
+      <li>
+        <div class="flex items-center">
+          <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/50" />
+          <a
+            href={item.href}
+            class={`ml-2 text-sm font-medium transition-colors ${
+              item.current
+                ? 'text-primary pointer-events-none'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+            aria-current={item.current ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        </div>
+      </li>
+    ))}
+  </ol>
+</nav>

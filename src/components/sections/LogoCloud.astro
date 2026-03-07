@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+interface Logo {
+  name: string;
+  src: string;
+  description?: string;
+}
+
+interface Props {
+  title?: string;
+  logos: Logo[];
+}
+
+const { title = "Trusted by industry leaders", logos = [] } = Astro.props;
+---
+
+<section class="py-12 bg-gray-50 dark:bg-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-8" set:html={title} />
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
+      {logos.map((logo) => (
+        <div class="group relative col-span-1 flex justify-center items-center p-4 rounded-xl dark:bg-white/10 transition-all duration-300 hover:bg-white dark:hover:bg-white/20">
+            <div class="grayscale group-hover:grayscale-0 transition-all duration-300 opacity-70 group-hover:opacity-100 group-hover:scale-110">
+                 <Image
+                    class="h-12 object-contain w-auto"
+                    src={logo.src}
+                    alt={logo.name}
+                    width={128}
+                    height={48}
+                    inferSize={true}
+                />
+            </div>
+            
+            {logo.description && (
+                <div class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-black/90 dark:bg-white/90 text-white dark:text-black text-xs rounded-lg shadow-xl w-48 pointer-events-none z-10">
+                    {logo.description}
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-black/90 dark:border-t-white/90"></div>
+                </div>
+            )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

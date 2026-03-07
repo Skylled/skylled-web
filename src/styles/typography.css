@@ -1,0 +1,135 @@
+@layer utilities {
+  .prose pre {
+    border-radius: 0.75rem !important;
+    padding: 1.5rem !important;
+    overflow: hidden !important;
+    border: 1px solid var(--color-foreground);
+    border-color: color-mix(in srgb, var(--color-foreground), transparent 90%);
+    background-color: color-mix(in srgb, var(--background), transparent 50%);
+    backdrop-filter: blur(4px);
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .prose img {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 0.75rem; 
+  }
+
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+    scroll-margin-top: 6rem;
+    position: relative;
+    color: var(--color-foreground);
+    line-height: 1.25;
+  }
+
+  .prose h1 {
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground), transparent 90%);
+  }
+
+  .prose h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground), transparent 93%);
+  }
+
+  .prose h3 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .prose h4 {
+    font-size: 1.25rem;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  /* Anchor Links */
+  .prose :is(h1, h2, h3, h4, h5, h6) a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+
+  .prose :is(h1, h2, h3, h4, h5, h6) a::before {
+    content: "#";
+    position: absolute;
+    left: -1.75rem;
+    color: var(--color-primary);
+    opacity: 0;
+    transition: all 0.2s ease;
+    font-weight: 400;
+    font-size: 0.8em;
+    top: 50%;
+    transform: translateY(-50%) translateX(4px);
+  }
+
+  .prose :is(h1, h2, h3, h4, h5, h6):hover a::before {
+    opacity: 0.4;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .prose table {
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--color-foreground), transparent 90%);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .prose thead {
+    background-color: color-mix(in srgb, var(--color-foreground), transparent 97%);
+  }
+
+  .prose th {
+    text-align: left;
+    padding: 1rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground), transparent 90%);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .prose td {
+    padding: 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground), transparent 90%);
+    color: color-mix(in srgb, var(--color-foreground), transparent 20%);
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  .prose tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .prose tbody tr {
+    transition: background-color 0.2s ease;
+  }
+
+  .prose tbody tr:hover {
+    background-color: color-mix(in srgb, var(--color-foreground), transparent 98%);
+  }
+  
+  .prose tbody tr:hover td {
+      color: var(--color-foreground);
+  }
+}

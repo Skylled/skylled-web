@@ -1,0 +1,27 @@
+---
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
+
+interface Props {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  class?: string;
+  as?: string;
+}
+
+const { level = 2, class: className, as } = Astro.props;
+
+const Tag = as || `h${level}`;
+
+const styles = {
+  1: "text-4xl md:text-5xl font-display font-bold",
+  2: "text-3xl font-display font-bold",
+  3: "text-2xl font-bold",
+  4: "text-xl font-bold",
+  5: "text-lg font-bold",
+  6: "text-base font-bold",
+};
+---
+
+<Tag class={twMerge(clsx(styles[level as keyof typeof styles], className))}>
+  <slot />
+</Tag>

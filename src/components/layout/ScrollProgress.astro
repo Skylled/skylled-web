@@ -1,0 +1,21 @@
+---
+---
+<div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-primary z-100 transition-all duration-150 ease-out" style="width: 0%"></div>
+
+<script>
+  const progressBar = document.getElementById('scroll-progress');
+  
+  const updateProgress = () => {
+    const scrollPx = document.documentElement.scrollTop;
+    const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrollPercent = (scrollPx / winHeightPx) * 100;
+    
+    if (progressBar) {
+      progressBar.style.width = `${scrollPercent}%`;
+    }
+  };
+
+  window.addEventListener('scroll', updateProgress);
+  // Initial check
+  updateProgress();
+</script>

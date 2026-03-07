@@ -1,0 +1,46 @@
+---
+title: 'Stats'
+description: 'Display key metrics and numbers.'
+order: 10
+---
+import Stats from '~/components/sections/Stats.astro';
+import StatItem from '~/components/ui/StatItem.astro';
+
+The **Stats** component displays a grid of key statistics, perfect for social proof or highlighting achievements.
+
+## Usage
+
+```astro
+import Stats from '~/components/sections/Stats.astro';
+import StatItem from '~/components/ui/StatItem.astro';
+
+<Stats title="Our Impact" description="We are making a difference.">
+  <StatItem value="10k+" label="Users" />
+  <StatItem value="5M+" label="Downloads" />
+</Stats>
+```
+
+## Example
+
+<Stats title="Trusted by Developers" description="Our community is growing every day.">
+  <StatItem value="10k+" label="Active Users" />
+  <StatItem value="99%" label="Uptime" />
+  <StatItem value="500+" label="Contributors" />
+  <StatItem value="24/7" label="Support" />
+</Stats>
+
+## Props
+
+### Stats
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | `undefined` | Optional heading for the section. |
+| `description` | `string` | `undefined` | Optional subtext for the section. |
+
+### StatItem
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `value` | `string` | Required | The main statistic number or text. |
+| `label` | `string` | Required | The label describing the statistic. |

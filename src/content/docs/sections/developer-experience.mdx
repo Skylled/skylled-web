@@ -1,0 +1,69 @@
+---
+title: 'Developer Experience'
+description: 'Showcase your tools CLI or coding experience.'
+order: 24
+---
+import DeveloperExperience from '~/components/sections/DeveloperExperience.astro';
+
+The **DeveloperExperience** component highlights the ease of use of your tool, featuring a feature list and a simulated terminal window.
+
+## Usage
+
+```astro
+import DeveloperExperience from '~/components/sections/DeveloperExperience.astro';
+
+<DeveloperExperience 
+  title="Built for Speed"
+  features={['Instant server start', 'Hot Module Replacement']}
+  terminal={{
+    comment: 'Start the dev server',
+    command: { tool: 'npm', args: 'run dev' },
+    successSteps: ['Server started in 10ms', 'Watching for changes...'],
+    readyMessage: 'Ready on http://localhost:3000'
+  }}
+/>
+```
+
+## Example
+
+<DeveloperExperience 
+  title="Zero config needed"
+  features={[
+    'TypeScript ready',
+    'Automatic routing',
+    'Edge deployed',
+    'API routes included'
+  ]}
+  terminal={{
+    comment: 'Initialize a new project',
+    command: { tool: 'npx', args: 'create-awesome-app@latest' },
+    successSteps: [
+        'Resolving dependencies...',
+        'Scaffolding project...',
+        'Installing packages...'
+    ],
+    readyMessage: 'Done! Happy coding.'
+  }}
+/>
+
+## Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `title` | `string` | The section heading. |
+| `features` | `string[]` | List of feature bullet points. |
+| `terminal` | `TerminalProps` | Configuration object for the terminal window. |
+
+### TerminalProps
+
+```ts
+interface TerminalProps {
+  comment: string;        // Comment line (e.g. # Start server)
+  command: {
+    tool: string;         // Tool name (e.g. npm)
+    args: string;         // Command args (e.g. run dev)
+  };
+  successSteps: string[]; // Array of success messages
+  readyMessage: string;   // Final ready prompt
+}
+```

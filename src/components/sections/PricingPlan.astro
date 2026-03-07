@@ -1,0 +1,56 @@
+---
+import { Check } from 'lucide-react';
+
+interface Props {
+  name: string;
+  price: string;
+  description: string;
+  features: string[];
+  cta: string;
+  popular?: boolean;
+  children?: any;
+}
+
+import { getLangFromUrl, useTranslations } from '~/i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+
+const t = useTranslations(lang);
+const { name, price, description, features, cta, popular = false } = Astro.props;
+---
+
+<div class={`relative p-8 rounded-3xl border flex flex-col ${popular ? 'bg-black/10 dark:bg-white/10 border-primary/50 shadow-2xl shadow-primary/20' : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/10'}`}>
+  {popular && (
+    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-linear-to-r from-primary to-purple-500 rounded-full text-xs font-bold text-white uppercase tracking-wider">
+      {t['pricing.mostPopular']}
+    </div>
+  )}
+  
+  <div class="mb-8">
+    <h3 class="text-xl font-bold mb-2">{name}</h3>
+    <p class="text-sm text-muted-foreground mb-4">{description}</p>
+    <div class="flex items-baseline gap-1">
+      <span class="text-4xl font-display font-bold">{price}</span>
+      <span class="text-muted-foreground">{t['pricing.perMonth']}</span>
+    </div>
+  </div>
+
+  <ul class="space-y-4 mb-8 flex-1">
+    {features.map((feature) => (
+      <li class="flex items-center gap-3 text-sm text-muted-foreground">
+        <Check className="w-4 h-4 text-primary" />
+        {feature}
+      </li>
+    ))}
+  </ul>
+
+  <a 
+    href={`/${lang}/checkout?plan=${name.toLowerCase()}`}
+    class={`block w-full py-3 px-6 rounded-xl text-center font-medium transition-all ${
+        popular 
+        ? 'bg-primary text-white hover:bg-primary/90 hover:scale-105' 
+        : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20'
+    }`}
+  >
+    {cta}
+  </a>
+</div>

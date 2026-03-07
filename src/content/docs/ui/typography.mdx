@@ -1,0 +1,77 @@
+---
+title: 'Typography'
+description: 'Headings and text styles.'
+order: 1
+---
+import Heading from '~/components/ui/Heading.astro';
+import Text from '~/components/ui/Text.astro';
+
+Typography components ensure consistency across your documentation and application.
+
+## Heading
+
+Use the **Heading** component for page titles and section headers.
+
+```astro
+import Heading from '~/components/ui/Heading.astro';
+
+<Heading level={1}>Main Title</Heading>
+<Heading level={2}>Section Title</Heading>
+```
+
+<div class="space-y-4 p-6 border rounded-xl">
+    <Heading level={1}>Heading 1</Heading>
+    <Heading level={2}>Heading 2</Heading>
+    <Heading level={3}>Heading 3</Heading>
+</div>
+
+## Text
+
+Use the **Text** component for paragraphs and body copy. It supports multiple variants.
+
+```astro
+import Text from '~/components/ui/Text.astro';
+
+<Text>Default paragraph text.</Text>
+<Text variant="muted">Muted text for secondary information.</Text>
+```
+
+### Variants
+
+<div class="space-y-4 p-6 border rounded-xl">
+    <div>
+        <span class="text-xs text-muted-foreground uppercase">Default</span>
+        <Text>The quick brown fox jumps over the lazy dog.</Text>
+    </div>
+    <div>
+         <span class="text-xs text-muted-foreground uppercase">Muted</span>
+        <Text variant="muted">This is secondary text that is less prominent.</Text>
+    </div>
+    <div>
+         <span class="text-xs text-muted-foreground uppercase">Lead</span>
+        <Text variant="lead">This is lead text, usually for introductions.</Text>
+    </div>
+    <div>
+         <span class="text-xs text-muted-foreground uppercase">Large</span>
+        <Text variant="large">This is slightly larger text.</Text>
+    </div>
+    <div>
+         <span class="text-xs text-muted-foreground uppercase">Small</span>
+        <Text variant="small">This is small text for captions.</Text>
+    </div>
+</div>
+
+## Props
+
+### Text
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `'default' \| 'muted' \| 'lead' \| 'large' \| 'small'` | `'default'` | The semantic style of the text. |
+| `as` | `HTMLTag` | `'p'` | The HTML tag to render (e.g. 'span', 'div'). |
+
+### Heading
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `level` | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `1` | The heading level (h1-h6). |

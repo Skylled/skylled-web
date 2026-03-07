@@ -1,0 +1,52 @@
+---
+title: 'Badge'
+description: 'Small status descriptors for UI elements.'
+order: 4
+---
+import Badge from '~/components/ui/Badge.astro';
+
+Badges are used to label items with short, descriptive information.
+
+## Usage
+
+```astro
+import Badge from '~/components/ui/Badge.astro';
+
+<Badge>New</Badge>
+```
+
+## Variants
+
+<div class="flex flex-wrap gap-4 p-6 border border-foreground/10 rounded-xl mb-6">
+  <Badge variant="default">Default</Badge>
+  <Badge variant="outline">Outline</Badge>
+  <Badge variant="secondary">Secondary</Badge>
+  <Badge variant="accent">Accent</Badge>
+</div>
+
+```astro
+<Badge variant="default">Default</Badge>
+<Badge variant="outline">Outline</Badge>
+<Badge variant="secondary">Secondary</Badge>
+<Badge variant="accent">Accent</Badge>
+```
+
+## Customization
+
+You can easily override styles using the `class` prop.
+
+<div class="flex gap-4 p-6 border border-foreground/10 rounded-xl mb-6">
+    <Badge variant="accent" class="text-green-600 bg-green-500/10 border-green-600/20">Success</Badge>
+    <Badge variant="accent" class="text-red-600 bg-red-500/10 border-red-600/20">Error</Badge>
+</div>
+
+```astro
+<Badge variant="accent" class="text-green-600 bg-green-500/10 border-green-600/20">Success</Badge>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `'default' \| 'outline' \| 'secondary' \| 'accent'` | `'default'` | The visual style of the badge. |
+| `class` | `string` | `undefined` | Custom classes to merge. |

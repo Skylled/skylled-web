@@ -1,0 +1,47 @@
+---
+title: 'Hero'
+description: 'High-impact entry point for your landing page.'
+order: 11
+---
+import Hero from '~/components/sections/Hero.astro';
+
+The `Hero` component is designed to grab attention immediately. It features an animated entrance, background blur effects, and clear calls to action.
+
+## Usage
+
+```astro
+import Hero from '~/components/sections/Hero.astro';
+
+<Hero 
+  badge="✨ New Release 2.0"
+  title="Build Faster with"
+  highlight="Astro Components"
+  description="The ultimate boilerplate for your next project."
+  primaryCta={{ text: "Get Started", href: "/docs" }}
+  secondaryCta={{ text: "View GitHub", href: "https://github.com" }}
+/>
+```
+
+## Example
+
+<div class="relative w-full border border-foreground/10 rounded-xl overflow-hidden bg-background mb-8">
+    <div class="scale-[0.6] sm:scale-[0.8] origin-top h-[500px] -mb-[200px] sm:-mb-[100px] pointer-events-none sm:pointer-events-auto">
+         <Hero 
+            badge="Preview Mode"
+            title="Next Gen"
+            highlight="Landing Pages"
+            description="This is how the Hero component looks when rendered. It automatically handles responsiveness and animations."
+         />
+    </div>
+</div>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `badge` | `string` | `"✨ ..."` | Top label badge text. |
+| `title` | `string` | `"Build Faster with"` | Main headline text. |
+| `highlight` | `string` | `"Premium Design"` | Text to be highlighted (gradient/color). |
+| `description` | `string` | `"A production-ready..."` | Subtitle text description. |
+| `primaryCta` | `{ text: string, href: string }` | `{ text: "Get Started", ... }` | Primary button configuration. |
+| `secondaryCta` | `{ text: string, href: string }` | `{ text: "View on GitHub", ... }` | Secondary button configuration. |

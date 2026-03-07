@@ -1,0 +1,87 @@
+---
+title: 'Comparison Table'
+description: 'Detailed feature comparison grid.'
+order: 9
+---
+import ComparisonTable from '~/components/sections/ComparisonTable.astro';
+
+The **ComparisonTable** allows you to compare features across different plans or products.
+
+## Usage
+
+```astro
+import ComparisonTable from '~/components/sections/ComparisonTable.astro';
+
+const plans = [
+    { name: 'Basic', description: 'For starters', key: 'basic' },
+    { name: 'Pro', description: 'Best value', popular: true , key: 'pro' },
+    { name: 'Enterprise', description: 'For big teams', key: 'enterprise' }
+];
+
+const features = [
+    { category: 'Core Features', items: [
+        { name: 'Users', basic: '1', pro: '5', enterprise: 'Unlimited' },
+        { name: 'Storage', basic: '1GB', pro: '10GB', enterprise: '1TB' }
+    ]},
+    { category: 'Support', items: [
+        { name: 'Response Time', basic: '48h', pro: '24h', enterprise: '1h' },
+        { name: 'Phone Support', basic: false, pro: true, enterprise: true }
+    ]}
+];
+
+<ComparisonTable 
+  plans={plans}
+  features={features}
+/>
+```
+
+## Example
+
+<ComparisonTable 
+  plans={[
+      { name: 'Free', description: 'Forever free', key:'free' },
+      { name: 'Pro', description: '$29/mo', popular: false, key:'pro' },
+      { name: 'Business', description: '$99/mo', key:'business' }
+  ]}
+  features={[
+      { category: 'Usage', items: [
+          { name: 'Projects', free: '3', pro: 'Unlimited', business: 'Unlimited' },
+          { name: 'API Calls', free: '1k/mo', pro: '100k/mo', business: '1M/mo' }
+      ]},
+      { category: 'Advanced', items: [
+          { name: 'SSO', free: false, pro: false, business: true },
+          { name: 'Audit Logs', free: false, pro: true, business: true }
+      ]}
+  ]}
+/>
+
+## Props
+
+### ComparisonTable
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `plans` | `Plan[]` | Array of plan objects (max 3 recommended). |
+| `features` | `FeatureCategory[]` | Categorized list of features to compare. |
+
+### Data Structures
+
+```ts
+interface Plan {
+  name: string;
+  description: string;
+  popular?: boolean;
+}
+
+interface FeatureCategory {
+  category: string;
+  items: FeatureItem[];
+}
+
+interface FeatureItem {
+  name: string;
+  // Key must match plan name (lowercase)
+  // Value can be string, number, or boolean
+  [planName: string]: string | number | boolean;
+}
+```

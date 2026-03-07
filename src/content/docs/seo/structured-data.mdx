@@ -1,0 +1,54 @@
+---
+title: 'Structured Data'
+description: 'JSON-LD categorization for rich search results.'
+order: 4
+---
+
+Structured data helps search engines understand the content of your page and display rich snippets in search results. This boilerplate implements **JSON-LD** (JavaScript Object Notation for Linked Data).
+
+## Implementation
+
+We use a dedicated `<Schema />` component (`src/components/Schema.astro`) to inject standard JSON-LD scripts into the `<head>` of your pages.
+
+## Built-in Schemas
+
+The following schemas are automatically generated based on the page type:
+
+### 1. Organization
+**Where:** Global (all pages).
+**Data:** Defined in `src/site.config.ts`. Includes your logo, social links, and contact info.
+
+### 2. WebSite
+**Where:** Homepage (`/`).
+**Feature:** Includes a "Sitelinks Search Box" definition, enabling a search bar for your site directly in Google results (if eligible).
+
+### 3. BlogPosting
+**Where:** Individual Blog Posts (`/blog/[slug]`).
+**Data:** Automatically maps frontmatter (Title, Description, Author, Date, Image) to the valid Schema.org structure.
+
+### 4. BreadcrumbList
+**Where:** All pages except Home.
+**Feature:** Generates a breadcrumb trail in search results, showing the page's position in the site hierarchy.
+
+### 5. FAQPage
+**Where:** Pricing Page (`/pricing`).
+**Use:** Marks up FAQ sections so they can appear as expandable questions in Google search results.
+
+## Adding Custom Schema
+
+To add custom structured data to a specific page or component:
+
+```astro
+---
+import Schema from '../components/Schema.astro';
+
+const eventSchema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "My Tech Conference",
+  "startDate": "2024-12-31"
+};
+---
+
+<Schema item={eventSchema} />
+```

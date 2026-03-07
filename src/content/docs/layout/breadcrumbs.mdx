@@ -1,0 +1,42 @@
+---
+title: 'Breadcrumbs'
+description: 'Navigation aid for user orientation.'
+order: 12
+---
+import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
+
+The **Breadcrumbs** component helps users understand their location within the website's hierarchy.
+
+## Usage
+
+```astro
+import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
+
+<Breadcrumbs 
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'Components', href: '/docs/components' },
+    { label: 'Breadcrumbs', href: '#' }
+  ]} 
+/>
+```
+
+## Example
+
+<div class="p-4 rounded-lg bg-black/5 dark:bg-white/5">
+    <Breadcrumbs 
+      items={[
+        { label: 'Home', href: '#' },
+        { label: 'Products', href: '#' },
+        { label: 'Smartphones', href: '#' },
+        { label: 'Galaxy S24', href: '#' }
+      ]} 
+    />
+</div>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `{ label: string, href: string }[]` | Required | List of navigation items. |

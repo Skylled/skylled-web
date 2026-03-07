@@ -1,0 +1,38 @@
+---
+title: 'Announcement Banner'
+description: 'A top-bar for important notifications.'
+order: 22
+---
+import AnnouncementBanner from '~/components/sections/AnnouncementBanner.astro';
+
+The **AnnouncementBanner** sits at the top of your page to highlight news, sales, or updates.
+
+## Usage
+
+```astro
+import AnnouncementBanner from '~/components/sections/AnnouncementBanner.astro';
+
+<AnnouncementBanner 
+  text="We are launching soon!" 
+  link="/blog/launch" 
+  linkText="Read more" 
+/>
+```
+
+## Example
+
+<div class="relative overflow-hidden rounded-lg border border-foreground/10">
+  <AnnouncementBanner 
+    text="New features just shipped!" 
+    link="#" 
+    linkText="Check them out" 
+  />
+</div>
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `text` | `string` | Required | The main message text. |
+| `link` | `string` | `undefined` | Optional URL for the call to action. |
+| `linkText` | `string` | `undefined` | Text for the link anchor. |

@@ -1,0 +1,19 @@
+---
+import Layout from '~/layouts/Layout.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+    image?: string;
+    article?: boolean;
+    noindex?: boolean;
+    nofollow?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<Layout {...props} availableLangs={[]}>
+    <slot name="head" slot="head" />
+    <slot />
+</Layout>

@@ -1,0 +1,85 @@
+---
+import { ui, defaultLang } from '~/i18n/ui';
+import Schema from '../layout/Schema.astro';
+import { ChevronDown } from 'lucide-react';
+
+import { useTranslations } from '~/i18n/utils';
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FAQItem[];
+}
+
+const { items } = Astro.props;
+const { lang = defaultLang} = Astro.params;
+const t = useTranslations(lang);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": items.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
+---
+
+<Schema item={schema} />
+
+<section class="py-24 relative overflow-hidden" id="faq">
+    <!-- Background element -->
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-primary/5 rounded-[100%] blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-3xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl font-display font-bold mb-6">{t['faq.default.title']}</h2>
+            <p class="text-lg text-muted-foreground">{t['faq.default.subtitle']}</p>
+        </div>
+
+        <div class="space-y-4">
+            {items.map((faq) => (
+                <details class="group border border-white/5 bg-white/2 hover:bg-white/4 backdrop-blur-sm rounded-2xl transition-all duration-300 open:bg-white/5 open:border-primary/20">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="text-lg font-medium pr-8">{faq.question}</span>
+                        <span class="transition-transform duration-300 group-open:rotate-180 text-primary">
+                            <ChevronDown className="w-5 h-5" />
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-muted-foreground leading-relaxed animate-accordion-down">
+                        {faq.answer}
+                    </div>
+                </details>
+            ))}
+        </div>
+    </div>
+</section>
+
+<style>
+    /* 
+      We use a simple animation for the content. 
+      Note: animating height on details is tricky without JS or the new interpolate-size property.
+      For simplicity and robustness in a static site, we'll use a fade/slide-in for the content
+    */
+    details[open] summary ~ * {
+        animation: accordion-down 0.3s ease-out;
+    }
+
+    @keyframes accordion-down {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

@@ -1,0 +1,56 @@
+---
+title: 'Features Grid'
+description: 'Display your product features in a clean grid.'
+order: 12
+---
+import FeaturesList from '~/components/sections/FeaturesList.astro';
+import FeatureItem from '~/components/ui/FeatureItem.astro';
+import { Zap, Shield, Smartphone } from 'lucide-react';
+
+The `FeaturesList` component displays a grid of icon-based value propositions. It's fully responsive and theme-aware.
+
+## Usage
+
+```astro
+import FeaturesList from '~/components/sections/FeaturesList.astro';
+import FeatureItem from '~/components/ui/FeatureItem.astro';
+import { Zap } from 'lucide-react';
+
+<FeaturesList>
+  <FeatureItem 
+    title="Lightning Fast" 
+    description="Optimized for speed."
+  >
+    <Zap slot="icon" class="w-6 h-6" />
+  </FeatureItem>
+</FeaturesList>
+```
+
+## Example
+
+<div class="p-6 border border-foreground/10 rounded-xl mb-8 bg-background">
+  <FeaturesList>
+    <FeatureItem title="Lightning Fast" description="Optimized for speed with zero-js by default.">
+        <Zap slot="icon" class="w-6 h-6 text-primary" />
+    </FeatureItem>
+    <FeatureItem title="Secure by Design" description="Built with best practices in mind.">
+        <Shield slot="icon" class="w-6 h-6 text-primary" />
+    </FeatureItem>
+    <FeatureItem title="Fully Responsive" description="Looks perfect on any device.">
+        <Smartphone slot="icon" class="w-6 h-6 text-primary" />
+    </FeatureItem>
+  </FeaturesList>
+</div>
+
+## Props
+
+### FeatureItem
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | Required | The heading for the feature. |
+| `description` | `string` | Required | A short summary of the feature. |
+
+#### Slots
+
+- `icon`: The icon to display above the title.

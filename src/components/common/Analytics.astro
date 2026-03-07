@@ -1,0 +1,56 @@
+---
+import { siteConfig } from '~/site.config';
+
+const { vendors, alwaysLoad } = siteConfig.analytics;
+---
+
+<script is:inline define:vars={{ vendors, alwaysLoad }}>
+  const loadScripts = () => {
+    // Prevent duplicate loading
+    if (window.analyticsLoaded) return;
+    window.analyticsLoaded = true;
+
+    // Google Analytics 4
+    if (vendors.googleAnalytics?.enabled && vendors.googleAnalytics?.id) {
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${vendors.googleAnalytics.id}`;
+        document.head.appendChild(gaScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', vendors.googleAnalytics.id);
+    }
+
+    // Rybbit Analytics
+    if (vendors.rybbit?.enabled && vendors.rybbit?.id) {
+        const rybbitScript = document.createElement('script');
+        rybbitScript.defer = true;
+        rybbitScript.setAttribute('data-site-id', vendors.rybbit.id);
+        rybbitScript.src = vendors.rybbit.src || 'https://app.rybbit.io/api/script.js';
+        document.head.appendChild(rybbitScript);
+    }
+
+    // Umami Analytics
+    if (vendors.umami?.enabled && vendors.umami?.id) {
+        const umamiScript = document.createElement('script');
+        umamiScript.defer = true;
+        umamiScript.setAttribute('data-website-id', vendors.umami.id);
+        umamiScript.src = vendors.umami.src || 'https://analytics.umami.is/script.js';
+        document.head.appendChild(umamiScript);
+    }
+    
+    console.log('Analytics loaded');
+  };
+
+  // Check for force load or existing consent
+  if (alwaysLoad || localStorage.getItem('cookie_consent') === 'accepted') {
+    loadScripts();
+  }
+
+  // Listen for new consent
+  window.addEventListener('consent:granted', () => {
+    loadScripts();
+  });
+</script>
