@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Silent Curator - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#d5dae4",
+                    "secondary": "#546071",
+                    "on-tertiary": "#f7f9ff",
+                    "on-surface": "#2e3339",
+                    "inverse-surface": "#0d0e10",
+                    "error-container": "#fe8983",
+                    "secondary-container": "#d7e3f8",
+                    "on-primary-fixed-variant": "#5a5c5e",
+                    "error": "#9f403d",
+                    "on-error": "#fff7f6",
+                    "primary-dim": "#515255",
+                    "on-surface-variant": "#5b5f66",
+                    "secondary-fixed-dim": "#c9d5e9",
+                    "surface-tint": "#5d5e61",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#475363",
+                    "on-error-container": "#752121",
+                    "on-secondary-fixed-variant": "#505c6d",
+                    "tertiary": "#4f6176",
+                    "surface-container": "#eceef3",
+                    "outline-variant": "#aeb2ba",
+                    "surface": "#faf9fc",
+                    "primary-container": "#e2e2e5",
+                    "on-background": "#2e3339",
+                    "surface-container-highest": "#dfe3eb",
+                    "background": "#faf9fc",
+                    "secondary-fixed": "#d7e3f8",
+                    "on-tertiary-container": "#415368",
+                    "outline": "#767b82",
+                    "primary": "#5d5e61",
+                    "surface-variant": "#dfe3eb",
+                    "on-secondary": "#f7f9ff",
+                    "tertiary-fixed-dim": "#c3d6ef",
+                    "on-tertiary-fixed": "#2f4155",
+                    "error-dim": "#4e0309",
+                    "tertiary-dim": "#43556a",
+                    "inverse-on-surface": "#9c9d9f",
+                    "surface-container-high": "#e5e8ef",
+                    "primary-fixed": "#e2e2e5",
+                    "on-primary-fixed": "#3e3f42",
+                    "inverse-primary": "#f9f9fc",
+                    "tertiary-fixed": "#d1e4fe",
+                    "on-tertiary-fixed-variant": "#4b5d72",
+                    "on-secondary-fixed": "#344050",
+                    "surface-bright": "#faf9fc",
+                    "secondary-dim": "#485465",
+                    "on-primary-container": "#505254",
+                    "on-primary": "#f7f7fa",
+                    "surface-container-low": "#f3f3f7",
+                    "primary-fixed-dim": "#d4d4d7",
+                    "tertiary-container": "#d1e4fe"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body": [
+                            "Newsreader"
+                    ],
+                    "label": [
+                            "Plus Jakarta Sans"
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Newsreader', serif;
+            background-color: theme('colors.surface-container-low');
+            color: theme('colors.on-surface');
+            line-height: 1.6;
+        }
+        .font-headline {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .font-label {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: 0.05em;
+        }
+        
+        .glass-panel {
+            background: rgba(250, 249, 252, 0.8);
+            backdrop-filter: blur(12px);
+        }
+
+        .dark .glass-panel {
+            background: rgba(26, 27, 30, 0.8);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .lift-card {
+            transition: transform 0.3s ease;
+        }
+        .lift-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pt-24">
+<!-- TopNavBar Component from JSON -->
+<header class="fixed top-0 w-full z-50 glass-panel border-b-0 transition-colors duration-300">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto ease-in-out transition-all">
+<div class="text-xl font-bold tracking-tight text-on-surface font-headline">
+                The Silent Curator
+            </div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-on-surface border-b-2 border-on-surface pb-1 plus-jakarta-sans font-medium text-sm tracking-wide font-headline" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-300 plus-jakarta-sans font-medium text-sm tracking-wide font-headline" href="#">About</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-300 plus-jakarta-sans font-medium text-sm tracking-wide font-headline" href="#">Archive</a>
+</nav>
+<div class="flex gap-4 items-center">
+<button aria-label="bookmark" class="text-on-surface-variant hover:text-on-surface transition-colors duration-300">
+<span class="material-symbols-outlined" style="opacity: 0.7;">bookmark</span>
+</button>
+<button aria-label="account_circle" class="text-on-surface-variant hover:text-on-surface transition-colors duration-300">
+<span class="material-symbols-outlined" style="opacity: 0.7;">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-24">
+<!-- Featured Article (Hero) - Asymmetrical Layout -->
+<section aria-label="Featured Article">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-7 order-2 lg:order-1 flex flex-col gap-6 pr-0 lg:pr-12">
+<div class="flex items-center gap-3">
+<span class="font-label text-xs uppercase text-primary tracking-[0.05em]">Featured Essay</span>
+<span class="h-px w-8 bg-outline-variant opacity-50"></span>
+<span class="font-label text-xs uppercase text-on-surface-variant tracking-[0.05em]">Oct 24, 2024</span>
+</div>
+<h1 class="font-headline text-[3.5rem] leading-tight font-bold text-on-surface tracking-tight">
+                        The Architecture of Silence: Finding Space in a Noisy World
+                    </h1>
+<p class="font-body text-[1.375rem] text-on-surface-variant italic leading-relaxed max-w-2xl">
+                        An exploration into why the absence of sound has become the ultimate luxury, and how modern design is adapting to curate stillness.
+                    </p>
+<div class="pt-6">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-headline text-sm tracking-wide hover:bg-primary-dim transition-colors duration-300">
+                            Read the Essay
+                        </button>
+</div>
+</div>
+<div class="lg:col-span-5 order-1 lg:order-2">
+<div class="aspect-[4/5] rounded-xl overflow-hidden bg-surface-container-highest relative">
+<img alt="Featured Article Cover" class="object-cover w-full h-full grayscale-[20%] mix-blend-multiply opacity-90 transition-transform duration-700 hover:scale-105" data-alt="Minimalist modern interior with strong architectural lines, soft diffused sunlight streaming through a large window, calm and serene atmosphere, monochromatic beige tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDhXLd9xSo309VSxqI0KtzegSVq1ebTOeBpKpiBCS6EqLFySSnQlcb8WcrCEVULXJcIeOQmWwg7kfVgTwVVbG3b_vuN8UyjxyTKCcm-uxn4ItFBJKwPPmbWhPWOYREeC333rWALLTNwej3PA6X5dC7nBMGga9-DNebipIt9LW5Yg4kj0q88-iGPQY7dMFVOkCz4K80r6IYAtiAuBu0ggJW0KEEhlTQkz2oiBp6__qRdxoTJQIK-ieVw1Toz6PjqL_yaa3NeDDjmJo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/30 to-transparent pointer-events-none"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Articles Grid - Bento Style -->
+<section aria-label="Recent Articles">
+<div class="flex items-center justify-between mb-12">
+<h2 class="font-headline text-[1.75rem] uppercase font-bold text-on-surface tracking-wide">
+                    Recent Curations
+                </h2>
+<a class="font-headline text-sm text-primary hover:text-on-surface transition-colors flex items-center gap-1" href="#">
+                    View Archive
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+<!-- Article Card 1 -->
+<article class="flex flex-col gap-4 group lift-card cursor-pointer">
+<div class="aspect-[4/3] rounded-lg overflow-hidden bg-surface-container-highest mb-2">
+<img alt="Article Image 1" class="object-cover w-full h-full grayscale-[10%] opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Close up of textured handmade paper sheets stacked unevenly, soft natural lighting, cream and off-white tones, tactile and organic feel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6Yn0ukP_VQH63Nau7V72Oyhsjgb0kgpwAnLaF342PEUoifmbazqUhTXEjF8s3OozIZPGHcej07KwttagjdS-QXk-7QxYC_XjblHkB61lH09_5-ga8gm5PR9yOXtR3n3vkmKlJ36zKObOKK1io7yNVcZQ1EWKrNk-pKqHZl2_492i3Qb8wZfXzJR-Ko4D8-27VUZtoiF3y_hpToaSXrrKIIoCi_LngrcYKRpGh6JUCNWUPC_0qMMIX6cijLeKi4iDuvrdD7RLrBus"/>
+</div>
+<div class="font-label text-xs uppercase text-on-surface-variant tracking-[0.05em]">Design · Oct 20</div>
+<h3 class="font-headline text-xl font-semibold text-on-surface leading-snug group-hover:text-primary transition-colors">
+                        Tactile Nostalgia: The Return of Paper
+                    </h3>
+<p class="font-body text-base text-on-surface-variant line-clamp-3">
+                        Why physical mediums are seeing a resurgence among digital natives seeking permanence in an ephemeral landscape.
+                    </p>
+</article>
+<!-- Article Card 2 -->
+<article class="flex flex-col gap-4 group lift-card cursor-pointer">
+<div class="aspect-[4/3] rounded-lg overflow-hidden bg-surface-container-highest mb-2">
+<img alt="Article Image 2" class="object-cover w-full h-full grayscale-[10%] opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Abstract shadow of a window blind cast on a plain textured plaster wall, warm late afternoon light, minimalist composition, wabi-sabi aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvijp3xBpGgQIKEtRVWlFKiJvbQWn_fIQlR_r8njIoqmVtSq-KtsCU1ZYASjv7Zq9hCWvYhWVgWp1-6OMfuSmjZ5iNSiDb6cUrkmDhgyoRWI8MeIHmdqFgFok-Hb3lYFyJ-v4b4wPH7lT6JViLIoUN8gTr4onsCSwdPyIuDd8V1f1MO44VwDJMd3CsnkJtfnaO8LPQLcFy-OKibGYTeWVgw_jIyHFaJpaEFc65xrcd-VQMSq2jWEJHWc312vN5sAMBXymkluGzu4M"/>
+</div>
+<div class="font-label text-xs uppercase text-on-surface-variant tracking-[0.05em]">Philosophy · Oct 15</div>
+<h3 class="font-headline text-xl font-semibold text-on-surface leading-snug group-hover:text-primary transition-colors">
+                        In Praise of Shadows
+                    </h3>
+<p class="font-body text-base text-on-surface-variant line-clamp-3">
+                        Revisiting Jun'ichirō Tanizaki's seminal essay to understand how modern interfaces desperately need darkness to create depth.
+                    </p>
+</article>
+<!-- Article Card 3 -->
+<article class="flex flex-col gap-4 group lift-card cursor-pointer">
+<div class="aspect-[4/3] rounded-lg overflow-hidden bg-surface-container-highest mb-2">
+<img alt="Article Image 3" class="object-cover w-full h-full grayscale-[10%] opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="A vintage mechanical typewriter sitting on a clean wooden desk, minimalist workspace, soft overhead lighting, focus on the keys, timeless aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6v4AdlDpq5A3ax1kqr4yL2IKktJ_zqoecDmwa4fCIuaWmcl4hLPhy3W8Dg6RYhDFwabRBumRcOZRH3bFtDdfIQ7odcVR5vodEWC-tyNBGuAe24e_hkJtaSesWVEtA_R539saERY7OeLYJJny-mlGrF5gsDwhnoiTkPu1vR8rDuj8v184tw748u3kelIgc4bT-bvUkRyHXZ4x929TD49kW0tCNK4Skq2S7jJKGqnblfirtzk0qDhHPV16yebSExGR2WETqWd2JaU4"/>
+</div>
+<div class="font-label text-xs uppercase text-on-surface-variant tracking-[0.05em]">Culture · Oct 10</div>
+<h3 class="font-headline text-xl font-semibold text-on-surface leading-snug group-hover:text-primary transition-colors">
+                        The Friction of Creation
+                    </h3>
+<p class="font-body text-base text-on-surface-variant line-clamp-3">
+                        When tools become too seamless, we lose the necessary resistance that sparks true creative thought. A look at intentionally difficult interfaces.
+                    </p>
+</article>
+</div>
+</section>
+</main>
+<!-- Footer Component from JSON -->
+<footer class="w-full py-12 px-6 mt-auto bg-surface-container tonal-shift-from-surface">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-4">
+<div class="text-lg font-black text-on-surface font-headline">
+                The Silent Curator
+            </div>
+<div class="text-xs uppercase tracking-[0.05em] text-on-surface-variant font-label opacity-70">
+                © 2024 The Silent Curator. Designed for the Intentional Reader.
+            </div>
+<nav class="flex gap-6">
+<a class="plus-jakarta-sans text-xs uppercase tracking-[0.05em] text-on-surface-variant opacity-70 hover:opacity-100 hover:text-on-surface transition-opacity font-label" href="#">Privacy</a>
+<a class="plus-jakarta-sans text-xs uppercase tracking-[0.05em] text-on-surface-variant opacity-70 hover:opacity-100 hover:text-on-surface transition-opacity font-label" href="#">Terms</a>
+<a class="plus-jakarta-sans text-xs uppercase tracking-[0.05em] text-on-surface-variant opacity-70 hover:opacity-100 hover:text-on-surface transition-opacity font-label" href="#">Contact</a>
+<a class="plus-jakarta-sans text-xs uppercase tracking-[0.05em] text-on-surface-variant opacity-70 hover:opacity-100 hover:text-on-surface transition-opacity font-label" href="#">Twitter</a>
+</nav>
+</div>
+</footer>
+</body></html>
