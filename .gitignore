@@ -1,34 +1,30 @@
-# dependencies
-node_modules/
+# Files and directories created by pub.
+**/doc/api/
+.dart_tool/
+.packages
 
-# build output
-dist/
+# Conventional directory for build output.
+/build/
 
-# generated types
-.astro/
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# environment variables
-.env
-.env.local
-.env.development
-.env.production
-.env.test
-
-# macOS-specific files
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
 .DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
 
-# Editor directories and files
-.idea
-.vscode/*
-!.vscode/extensions.json
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
