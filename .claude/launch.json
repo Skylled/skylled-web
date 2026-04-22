@@ -4,8 +4,8 @@
     {
       "name": "skylled-web",
       "runtimeExecutable": "jaspr",
-      "runtimeArgs": ["serve", "--port", "8080"],
-      "port": 8080
+      "runtimeArgs": ["serve", "--port", "4100"],
+      "port": 4100
     }
   ]
 }

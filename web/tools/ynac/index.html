@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YNAC — Cash Flow Calendar</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-theme="auto">
+  <div class="app" id="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span>YNAC</span>
+        <span class="brand-sub">· cash flow calendar</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="refresh-btn" title="Refresh" aria-label="Refresh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+        </button>
+        <button class="icon-btn" id="settings-btn" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="banner-slot"></div>
+
+    <section class="confidence" id="confidence" aria-label="Spend confidence" hidden>
+      <div class="confidence-label" id="confidence-label">You&rsquo;re good to spend</div>
+      <div class="confidence-verdict" id="confidence-verdict">Loading&hellip;</div>
+      <div class="confidence-reason" id="confidence-reason"></div>
+
+      <div class="confidence-stats">
+        <div>
+          <div class="stat-label">Balance today</div>
+          <div class="stat-value" id="stat-balance">—</div>
+          <div class="stat-sub" id="stat-balance-sub"></div>
+        </div>
+        <div>
+          <div class="stat-label" id="stat-outflow-label">Outflows next 7 days</div>
+          <div class="stat-value" id="stat-outflow">—</div>
+          <div class="stat-sub" id="stat-outflow-sub"></div>
+        </div>
+        <div>
+          <div class="stat-label">Safe to spend</div>
+          <div class="stat-value safe" id="stat-safe">—</div>
+          <div class="stat-sub" id="stat-safe-sub"></div>
+        </div>
+      </div>
+
+      <div class="heads-up" id="heads-up" hidden>
+        <span class="heads-up-dot"></span>
+        <span id="heads-up-text"></span>
+      </div>
+    </section>
+
+    <div class="account-bar" id="account-bar" hidden>
+      <label class="account-bar-label" for="account-picker">Showing</label>
+      <div class="account-bar-select">
+        <select id="account-picker" aria-label="Account to project">
+          <!-- populated dynamically -->
+        </select>
+        <svg class="account-bar-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <span class="account-bar-balance" id="account-bar-balance" aria-live="polite"></span>
+    </div>
+
+    <div class="cal-header">
+      <div class="cal-title">Next 30 days</div>
+      <div class="cal-legend">
+        <span class="legend-item"><span class="legend-swatch inflow"></span>Income</span>
+        <span class="legend-item"><span class="legend-swatch outflow"></span>Bill</span>
+        <span class="legend-item"><span class="legend-swatch overdue"></span>Overdue</span>
+      </div>
+    </div>
+
+    <div class="cal-grid" id="cal-grid">
+      <div class="cal-dow">
+        <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+      </div>
+      <div class="cal-days" id="cal-days"></div>
+    </div>
+
+    <div class="meta" id="meta">
+      <span id="meta-projected">—</span>
+      <span><a href="https://app.ynab.com/" target="_blank" rel="noopener">View on YNAB →</a></span>
+    </div>
+
+    <div id="loading" class="loading">Loading your budget&hellip;</div>
+    <div id="error" class="error-state" hidden></div>
+    <div id="signin" class="signin" hidden>
+      <h1>YNAC</h1>
+      <p>Connect your YNAB account to see the next 30 days of cash flow.</p>
+      <button class="primary-btn" id="signin-btn">Connect YNAB</button>
+    </div>
+  </div>
+
+  <dialog id="settings-dialog" class="settings-dialog">
+    <form method="dialog" id="settings-form">
+      <h2>Settings</h2>
+
+      <label class="field">
+        <span>Budget</span>
+        <select id="setting-budget"></select>
+        <small>The YNAB budget to pull from. Changing this reloads the calendar.</small>
+      </label>
+
+      <label class="field">
+        <span>Warning threshold</span>
+        <input type="number" id="setting-warning" min="0" step="10" />
+        <small>Days with a projected balance below this turn amber.</small>
+      </label>
+
+      <label class="field">
+        <span>Spend buffer</span>
+        <input type="number" id="setting-buffer" min="0" step="10" />
+        <small>Subtracted from “safe to spend” so you don’t spend down to zero.</small>
+      </label>
+
+      <label class="field">
+        <span>Spend horizon (days)</span>
+        <input type="number" id="setting-horizon" min="1" max="30" step="1" />
+        <small>How far ahead the “safe to spend” total looks. Bump this to your payday cadence (e.g. 14) so an incoming paycheck counts.</small>
+      </label>
+
+      <label class="field">
+        <span>Theme</span>
+        <select id="setting-theme">
+          <option value="auto">Auto (system)</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+
+      <div class="settings-actions">
+        <button type="button" id="settings-logout" class="danger-btn">Log out</button>
+        <div class="settings-actions-right">
+          <button type="button" id="settings-cancel">Cancel</button>
+          <button type="submit" class="primary-btn">Save</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="day-dialog" class="day-dialog">
+    <form method="dialog">
+      <h2 id="day-dialog-title">Events</h2>
+      <div id="day-dialog-events"></div>
+      <div class="settings-actions-right">
+        <button type="submit" class="primary-btn">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,12 +1,6 @@
 ---
 title: "skylled.dev"
-description: "Kyle Bradshaw's personal site and blog."
+description: "Kyle Bradshaw's corner of the web — writing, code, and frequent detours."
 ---
 
-# skylled.dev
-
-Welcome. This is where I write things down.
-
-## Posts
-
-- [Hello, Jaspr](/posts/hello-world)
+Writer, engineer, hacker, enthusiast, based in Manchester, NH. Writing on my own terms for a change.
