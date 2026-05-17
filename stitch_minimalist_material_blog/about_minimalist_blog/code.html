@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About - The Silent Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#d5dae4",
+                        "secondary": "#546071",
+                        "on-tertiary": "#f7f9ff",
+                        "on-surface": "#2e3339",
+                        "inverse-surface": "#0d0e10",
+                        "error-container": "#fe8983",
+                        "secondary-container": "#d7e3f8",
+                        "on-primary-fixed-variant": "#5a5c5e",
+                        "error": "#9f403d",
+                        "on-error": "#fff7f6",
+                        "primary-dim": "#515255",
+                        "on-surface-variant": "#5b5f66",
+                        "secondary-fixed-dim": "#c9d5e9",
+                        "surface-tint": "#5d5e61",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#475363",
+                        "on-error-container": "#752121",
+                        "on-secondary-fixed-variant": "#505c6d",
+                        "tertiary": "#4f6176",
+                        "surface-container": "#eceef3",
+                        "outline-variant": "#aeb2ba",
+                        "surface": "#faf9fc",
+                        "primary-container": "#e2e2e5",
+                        "on-background": "#2e3339",
+                        "surface-container-highest": "#dfe3eb",
+                        "background": "#faf9fc",
+                        "secondary-fixed": "#d7e3f8",
+                        "on-tertiary-container": "#415368",
+                        "outline": "#767b82",
+                        "primary": "#5d5e61",
+                        "surface-variant": "#dfe3eb",
+                        "on-secondary": "#f7f9ff",
+                        "tertiary-fixed-dim": "#c3d6ef",
+                        "on-tertiary-fixed": "#2f4155",
+                        "error-dim": "#4e0309",
+                        "tertiary-dim": "#43556a",
+                        "inverse-on-surface": "#9c9d9f",
+                        "surface-container-high": "#e5e8ef",
+                        "primary-fixed": "#e2e2e5",
+                        "on-primary-fixed": "#3e3f42",
+                        "inverse-primary": "#f9f9fc",
+                        "tertiary-fixed": "#d1e4fe",
+                        "on-tertiary-fixed-variant": "#4b5d72",
+                        "on-secondary-fixed": "#344050",
+                        "surface-bright": "#faf9fc",
+                        "secondary-dim": "#485465",
+                        "on-primary-container": "#505254",
+                        "on-primary": "#f7f7fa",
+                        "surface-container-low": "#f3f3f7",
+                        "primary-fixed-dim": "#d4d4d7",
+                        "tertiary-container": "#d1e4fe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": [
+                            "Plus Jakarta Sans", "sans-serif"
+                        ],
+                        "body": [
+                            "Newsreader", "serif"
+                        ],
+                        "label": [
+                            "Plus Jakarta Sans", "sans-serif"
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.surface-container-low');
+            color: theme('colors.on-surface');
+            font-family: theme('fontFamily.body');
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4, h5, h6, .font-headline {
+            font-family: theme('fontFamily.headline');
+        }
+        .font-label {
+            font-family: theme('fontFamily.label');
+        }
+        .glass-header {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#faf9fc]/80 dark:bg-[#1a1b1e]/80 backdrop-blur-md glass-header shadow-none">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<a class="text-xl font-bold tracking-tight text-[#37474F] dark:text-[#faf9fc] font-headline" href="#">
+                The Silent Curator
+            </a>
+<div class="hidden md:flex gap-8 items-center font-label plus-jakarta-sans font-medium text-sm tracking-wide">
+<a class="text-[#5d5e61] dark:text-[#aeb2ba] hover:text-[#37474F] transition-colors ease-in-out transition-all duration-300" href="#">Home</a>
+<a class="text-[#37474F] dark:text-[#faf9fc] border-b-2 border-[#37474F] dark:border-[#faf9fc] pb-1 ease-in-out transition-all duration-300" href="#">About</a>
+<a class="text-[#5d5e61] dark:text-[#aeb2ba] hover:text-[#37474F] transition-colors ease-in-out transition-all duration-300" href="#">Archive</a>
+</div>
+<div class="flex items-center gap-4 text-[#37474F] dark:text-[#eceef3]">
+<button aria-label="bookmark" class="hover:text-[#37474F] dark:hover:text-[#faf9fc] duration-300 ease-in-out transition-all">
+<span class="material-symbols-outlined opacity-70" data-icon="bookmark">bookmark</span>
+</button>
+<button aria-label="account_circle" class="hover:text-[#37474F] dark:hover:text-[#faf9fc] duration-300 ease-in-out transition-all">
+<span class="material-symbols-outlined opacity-70" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-32 pb-24 px-6 max-w-5xl mx-auto w-full">
+<article class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24 items-start">
+<!-- Image Section (Asymmetrical layout) -->
+<div class="md:col-span-5 relative">
+<div class="aspect-[4/5] bg-surface-container-highest rounded-none overflow-hidden relative group">
+<img alt="Portrait of the author" class="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-105 group-hover:grayscale-0" data-alt="Black and white portrait of a thoughtful person in a minimal studio setting, soft window light, high contrast editorial style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEzaSFfh5JWOkuhwy-dCp11aNTqWw3yIMh8T0oL0VBPRIOWAACEkdFvfDiMI_fiWpK8oVm2XGiAR7lkbAISEeNB86AWk0aV0Ebhwkon8S9iwIuY-bQDTxQd9qvxb6KbiickWZhTd7dObqXiuYrDSVfg24QWHJo25qAUjYl-lrwBAPB1PUL-qabF4Eo6aziUNPYUo9igPKeDV9ZuZ-4PusYHbg6zcUWHS6zaLG4x5TROCu9bjIsVc5XiWDBfcGl8TUsTOHCC11JK24"/>
+<div class="absolute inset-0 border border-outline-variant/15 pointer-events-none"></div>
+</div>
+</div>
+<!-- Content Section -->
+<div class="md:col-span-7 flex flex-col justify-center h-full space-y-8">
+<header class="space-y-4">
+<h1 class="text-[3.5rem] leading-none font-bold font-headline text-on-surface tracking-tight">
+                        Curating the <br/><span class="italic font-body text-secondary">Quiet Moments</span>.
+                    </h1>
+<p class="text-label-md font-label uppercase tracking-[0.05em] text-secondary">Est. 2024 — London, UK</p>
+</header>
+<div class="space-y-6 text-body-lg text-on-surface-variant max-w-prose">
+<p>
+<span class="text-[3.5rem] leading-none float-left mr-3 mt-[-0.2em] font-headline text-primary font-bold">W</span>
+                        elcome to a space designed for intentional reading. In a digital landscape saturated with noise, The Silent Curator exists as an archive of considered thought, minimalist aesthetics, and deliberate living. 
+                    </p>
+<p>
+                        My background is rooted in architectural design and editorial photography—disciplines that taught me the profound value of negative space. Here, we explore the intersection of design, slow living, and visual arts without the urgency of modern media.
+                    </p>
+<p>
+                        Every piece published is meant to be digested slowly, preferably with a warm beverage in hand, honoring the tradition of long-form print in a digital format.
+                    </p>
+</div>
+<!-- Social Links / Contact -->
+<div class="pt-8 flex gap-6 items-center border-t border-outline-variant/15">
+<a class="font-label text-sm uppercase tracking-wide text-secondary hover:text-on-surface transition-colors duration-300 flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="mail">mail</span>
+                        Contact
+                    </a>
+<a class="font-label text-sm uppercase tracking-wide text-secondary hover:text-on-surface transition-colors duration-300 flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="camera_alt">camera_alt</span>
+                        Instagram
+                    </a>
+<a class="font-label text-sm uppercase tracking-wide text-secondary hover:text-on-surface transition-colors duration-300 flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="article">article</span>
+                        Substack
+                    </a>
+</div>
+</div>
+</article>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-6 mt-auto bg-[#eceef3] dark:bg-[#1a1b1e]">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-4">
+<div class="text-lg font-black text-[#37474F] font-headline">
+                The Silent Curator
+            </div>
+<div class="flex gap-6 font-label plus-jakarta-sans text-xs uppercase tracking-[0.05em]">
+<a class="text-[#5d5e61] opacity-70 hover:opacity-100 transition-opacity" href="#">Privacy</a>
+<a class="text-[#5d5e61] opacity-70 hover:opacity-100 transition-opacity" href="#">Terms</a>
+<a class="text-[#5d5e61] opacity-70 hover:opacity-100 transition-opacity" href="#">Contact</a>
+<a class="text-[#5d5e61] opacity-70 hover:opacity-100 transition-opacity" href="#">Twitter</a>
+</div>
+<div class="text-[#5d5e61] dark:text-[#aeb2ba] plus-jakarta-sans text-xs uppercase tracking-[0.05em]">
+                © 2024 The Silent Curator. Designed for the Intentional Reader.
+            </div>
+</div>
+</footer>
+</body></html>
