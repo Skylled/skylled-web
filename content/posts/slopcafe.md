@@ -9,7 +9,7 @@ authorImage: https://github.com/Skylled.png
 tags: ["AI", "Cloudflare", "Open Source", "Agents", "MCP"]
 ---
 
-> **TL;DR:** Slopcafe is a free, [open-source](https://github.com/Skylled/slopcafe), single-tenant web hosting platform for you and your AI agents to work on HTML/Markdown documents and share that work with others.
+> **TL;DR:** [Slopcafe](https://slopcafe.com) is a free, [open-source](https://github.com/Skylled/slopcafe), single-tenant web hosting platform for you and your AI agents to work on HTML/Markdown documents and share that work with others.
 
 Like many others, my usage of AI has scaled up significantly in 2026. I barely write my own code anymore now. I just prompt Claude, and out comes something pretty close to what I was hoping for. And that's not just true for code either. To a significant extent, I am a knowledge worker and always have been. I conduct research. I read code to discover changes. I reverse-engineer applications to find what Google and other companies are working on. More recently, I've been using these knowledge work skills and coding capabilities to enhance my search for a more permanent home for me and my family.
 
@@ -77,7 +77,7 @@ Somewhere along the way, I landed on the name "Slopcafe." I felt that this manag
 
 ## Now open source
 
-After two weeks of iteration and dogfooding, it's reached a point where I'm ready to share it with the world. So without further ado, Slopcafe is now an open source project, [available to download from GitHub today](https://github.com/Skylled/slopcafe)!
+After two weeks of iteration and dogfooding, it's reached a point where I'm ready to share it with the world. So without further ado, [Slopcafe](https://slopcafe.com) is now an open source project, [available to download from GitHub today](https://github.com/Skylled/slopcafe)!
 
 Everything is 100% functional on Cloudflare's free tier, and you don't even need your own domain. Workers come with a free workers.dev subdomain that will more than suffice. The included documentation (admittedly all written by Claude Opus or Fable, just like the code itself) should be enough to get you started — or like me, you can ask Claude Code/Cowork to do most of it for you.
 
