@@ -4,6 +4,7 @@ description: "A free, open-source web platform for you and your AI agents to pub
 author: "Kyle Bradshaw"
 date: "10 June 2026"
 readTime: "8 min"
+image: /images/slopcafe-hero.png
 authorImage: https://github.com/Skylled.png
 tags: ["AI", "Cloudflare", "Open Source", "Agents", "MCP"]
 ---
