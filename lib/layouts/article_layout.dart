@@ -187,6 +187,10 @@ class ArticleLayout extends PageLayoutBase {
       margin: Margin.symmetric(vertical: 2.rem),
       padding: Padding.all(1.25.rem),
       backgroundColor: Palette.surfaceContainer,
+      // jaspr_content's default `.content pre` color is tuned for a dark code
+      // background; our block is light, so set a readable on-surface color that
+      // `pre code` inherits.
+      color: Palette.onSurface,
       radius: BorderRadius.circular(0.5.rem),
       overflow: const Overflow.only(x: Overflow.auto),
       fontSize: 0.875.rem,
