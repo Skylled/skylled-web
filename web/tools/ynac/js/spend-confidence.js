@@ -1,6 +1,6 @@
 // Render the spend-confidence header.
 
-import { formatMoney, formatMoneyShort } from './format.js';
+import { formatMoney, formatMoneyWhole } from './format.js';
 
 const VERDICTS = {
   green: {
@@ -17,6 +17,21 @@ const VERDICTS = {
   },
 };
 
+// Shown when the numbers didn't add up to something renderable (corrupt
+// settings, a half-loaded fetch). A NaN safe-to-spend scores as green in the
+// naive comparison, so an unusable figure must never reach the normal path.
+const UNAVAILABLE = {
+  label: "Can't say right now",
+  verdict: "Some of the numbers didn't come through.",
+};
+
+// Closing clause of the reason sentence, keyed by level.
+const TAILS = {
+  green: "there's still room.",
+  amber: "you're close to the edge.",
+  red: "you're over.",
+};
+
 export function renderConfidence({
   confidence,
   headsUp,
@@ -24,83 +39,123 @@ export function renderConfidence({
   spendBuffer,
   lastRefreshed,
   overdueCount,
+  overdueTotal = 0,
 }) {
+  const c = confidence || {};
   const root = document.getElementById('confidence');
   root.hidden = false;
-  root.setAttribute('data-level', confidence.level);
 
-  const horizon = confidence.horizonDays || 7;
-  const horizonLabel = describeHorizon(horizon);
+  // A non-finite safe-to-spend means the level below it is meaningless — treat
+  // the whole card as unavailable and fall back to amber rather than green.
+  const usable = Number.isFinite(Number(c.safeToSpend)) && Boolean(VERDICTS[c.level]);
+  const level = usable ? c.level : 'amber';
+  root.setAttribute('data-level', level);
 
-  const v = VERDICTS[confidence.level];
+  const horizonLabel = describeHorizon(c.horizonDays);
+  const outflowAbs = Math.abs(finite(c.outflowHorizon));
+  const inflow = Math.max(0, finite(c.inflowHorizon));
+  const buffer = Math.max(0, finite(spendBuffer));
+  const overdueN = Math.max(0, Math.trunc(finite(overdueCount)));
+
+  const v = usable ? VERDICTS[c.level] : UNAVAILABLE;
   document.getElementById('confidence-label').textContent = v.label;
   document.getElementById('confidence-verdict').textContent = v.verdict;
 
-  // Reason sentence — composed from numbers so it reads naturally.
-  const outflowAbs = Math.abs(confidence.outflowHorizon || 0);
-  const inflow = confidence.inflowHorizon || 0;
-  const parts = [];
-  if (outflowAbs > 0 || inflow > 0) {
-    const pieces = [];
-    if (outflowAbs > 0) pieces.push(`${formatMoneyShort(outflowAbs)} in bills`);
-    if (inflow > 0) pieces.push(`${formatMoneyShort(inflow)} coming in`);
-    const netPhrase = pieces.join(' and ');
-    parts.push(
-      `After ${netPhrase} over the next ${horizonLabel} and your ${formatMoneyShort(spendBuffer)} buffer,`
-    );
-    if (confidence.level === 'green') parts.push("there's still room.");
-    else if (confidence.level === 'amber') parts.push("you're close to the edge.");
-    else parts.push("you're over.");
-  } else {
-    parts.push(`Nothing scheduled in the next ${horizonLabel}.`);
-    if (confidence.level !== 'red') parts.push('Easy stretch.');
-  }
-  if (overdueCount > 0) {
-    parts.push(`Don't forget ${overdueCount} overdue item${overdueCount === 1 ? '' : 's'}.`);
-  }
-  document.getElementById('confidence-reason').textContent = parts.join(' ');
+  document.getElementById('confidence-reason').textContent = usable
+    ? buildReason({ level, horizonLabel, outflowAbs, inflow, buffer, overdueN, overdueTotal })
+    : "Safe-to-spend couldn't be worked out from the current data. Try refreshing, or check your settings.";
 
   // Stats
-  document.getElementById('stat-balance').textContent = formatMoney(confidence.currentBalance);
+  document.getElementById('stat-balance').textContent = moneyStat(c.currentBalance);
   document.getElementById('stat-balance-sub').textContent =
     [accountName, lastRefreshed ? `as of ${formatClock(lastRefreshed)}` : null].filter(Boolean).join(' · ');
 
-  // Outflow card — label reflects the configured horizon, sub-label shows
-  // inflow when present so the user sees what's being netted in.
+  // Outflow card — the big number is GROSS outflows, so the sub-label has to
+  // stay additive. Anything phrased as "less $X" would imply income had
+  // already been subtracted from the figure above it, which it hasn't.
   document.getElementById('stat-outflow-label').textContent = `Outflows next ${horizonLabel}`;
-  document.getElementById('stat-outflow').textContent = formatMoney(outflowAbs);
-  let outflowSub = outflowAbs > 0 ? 'Scheduled bills' : '—';
-  if (inflow > 0) {
-    outflowSub = outflowAbs > 0
-      ? `Bills · less ${formatMoneyShort(inflow)} income`
-      : `Plus ${formatMoneyShort(inflow)} income`;
-  }
-  document.getElementById('stat-outflow-sub').textContent = outflowSub;
+  document.getElementById('stat-outflow').textContent =
+    moneyStat(Math.abs(Number(c.outflowHorizon)));
+  const outflowSub = [
+    outflowAbs > 0 ? 'Scheduled bills' : inflow > 0 ? 'No bills' : null,
+    inflow > 0 ? `+${formatMoneyWhole(inflow)} income expected` : null,
+  ].filter(Boolean);
+  document.getElementById('stat-outflow-sub').textContent = outflowSub.join(' · ') || '—';
 
-  document.getElementById('stat-safe').textContent = formatMoney(confidence.safeToSpend);
-  const safeSub = inflow > 0
-    ? `After bills, income, and ${formatMoneyShort(spendBuffer)} buffer`
-    : `After bills + ${formatMoneyShort(spendBuffer)} buffer`;
-  document.getElementById('stat-safe-sub').textContent = safeSub;
+  document.getElementById('stat-safe').textContent = moneyStat(c.safeToSpend);
+  const safeBase = inflow > 0 ? 'After bills and income' : 'After bills';
+  document.getElementById('stat-safe-sub').textContent =
+    buffer > 0 ? `${safeBase}, minus ${formatMoneyWhole(buffer)} buffer` : safeBase;
 
   // Heads-up strip (worst upcoming day)
   const headsUpEl = document.getElementById('heads-up');
-  if (headsUp) {
+  const headsUpBalance = headsUp ? Number(headsUp.endingBalance) : NaN;
+  if (headsUp && Number.isFinite(headsUpBalance)) {
     headsUpEl.hidden = false;
-    const dateLabel = formatDateLabel(headsUp.date);
-    const balLabel = formatMoney(headsUp.endingBalance);
-    document.getElementById('heads-up-text').innerHTML =
-      `<strong>Heads up:</strong> things get tight around ${dateLabel} — projected balance dips to ${balLabel}.`;
+    const textEl = document.getElementById('heads-up-text');
+    const strong = document.createElement('strong');
+    strong.textContent = 'Heads up:';
+    textEl.replaceChildren(
+      strong,
+      ` things get tight around ${formatDateLabel(headsUp.date)} — projected balance dips to ${formatMoney(headsUpBalance)}.`
+    );
   } else {
     headsUpEl.hidden = true;
   }
 }
 
+// Compose the reason sentence from the numbers. Money here is always whole
+// units — a sentence that mixes "$2,288.98" with "$2,400" reads like a typo.
+function buildReason({ level, horizonLabel, outflowAbs, inflow, buffer, overdueN, overdueTotal }) {
+  const parts = [];
+  if (outflowAbs > 0 || inflow > 0) {
+    const pieces = [];
+    if (outflowAbs > 0) pieces.push(`${formatMoneyWhole(outflowAbs)} in bills`);
+    if (inflow > 0) pieces.push(`${formatMoneyWhole(inflow)} coming in`);
+    // The buffer gets its own clause; joining it with "and" gave the sentence
+    // two "and"s and made it read as a third cash-flow item.
+    let sentence = `After ${pieces.join(' and ')} over the next ${horizonLabel}`;
+    if (buffer > 0) sentence += `, minus your ${formatMoneyWhole(buffer)} buffer`;
+    parts.push(`${sentence}, ${TAILS[level]}`);
+  } else {
+    parts.push(`Nothing scheduled in the next ${horizonLabel}.`);
+    if (level !== 'red') parts.push('Easy stretch.');
+  }
+  if (overdueN > 0) {
+    // Overdue occurrences are carried into today's projection, so say so —
+    // otherwise the balance looks lower than the calendar explains.
+    const noun = `${overdueN} overdue item${overdueN === 1 ? '' : 's'}`;
+    const verb = overdueN === 1 ? 'is' : 'are';
+    const total = Math.abs(finite(overdueTotal));
+    parts.push(
+      total > 0
+        ? `${noun} worth ${formatMoneyWhole(total)} ${verb} already counted against today.`
+        : `${noun} ${verb} already counted against today.`
+    );
+  }
+  return parts.join(' ');
+}
+
+// Big stat values keep their cents — but show a dash rather than "$NaN".
+function moneyStat(milliunits) {
+  const value = Number(milliunits);
+  return Number.isFinite(value) ? formatMoney(value) : '—';
+}
+
+// Anything non-numeric collapses to 0, which the `> 0` guards then skip.
+function finite(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
 function describeHorizon(days) {
-  if (days === 7) return '7 days';
-  if (days === 14) return '14 days';
-  if (days % 7 === 0) return `${days / 7} weeks`;
-  return `${days} days`;
+  const n = Math.round(Number(days));
+  if (!Number.isFinite(n) || n < 1) return '7 days';
+  if (n > 7 && n % 7 === 0) {
+    const weeks = n / 7;
+    return `${weeks} week${weeks === 1 ? '' : 's'}`;
+  }
+  return `${n} day${n === 1 ? '' : 's'}`;
 }
 
 function formatClock(date) {

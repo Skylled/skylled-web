@@ -8,12 +8,21 @@ const CLIENTS = {
   // e.g. http://localhost:8080/tools/ynac/oauth-callback.html
   'localhost': 'zZfslwdUt8_TRCyX6XAZRkpZjeT0DLGH115IU9lFIGk',
   '127.0.0.1': 'zZfslwdUt8_TRCyX6XAZRkpZjeT0DLGH115IU9lFIGk',
-  // Production: register a client with redirect URI
-  // https://skylled.dev/tools/ynac/oauth-callback.html and paste the id here.
+  // Production: registered with redirect URI
+  // https://skylled.dev/tools/ynac/oauth-callback.html
   'skylled.dev': 'zZfslwdUt8_TRCyX6XAZRkpZjeT0DLGH115IU9lFIGk',
 };
 
 const TOKEN_KEY = 'ynac.token';
+// Keep STATE_KEY / TOKEN_KEY in sync with oauth-callback.html — that page runs
+// before this module loads, so it can't import them.
+//
+// CLAUDE.md rule 5 says the only storage is `ynac.token` and `ynac.settings` in
+// localStorage. STATE_KEY is a deliberate, narrow exception: the OAuth CSRF
+// nonce is not sensitive (it's a public URL parameter by design), it is
+// single-use, and sessionStorage is strictly shorter-lived than the localStorage
+// the rule already permits. Nothing sensitive lives outside localStorage.
+const STATE_KEY = 'ynac.oauth_state';
 const AUTH_BASE = 'https://app.ynab.com/oauth/authorize';
 
 function getClientId() {
@@ -28,8 +37,30 @@ function getClientId() {
   return id;
 }
 
+// The redirect URI must match the one registered with YNAB *exactly*, so it has
+// to be the same string whether the user is on `/`, `/index.html`, or a project
+// subpath like `/YNAC/`. Drop a trailing filename segment (anything with a dot
+// in it) and any trailing slashes, then append the callback:
+//   /                 → /oauth-callback.html
+//   /index.html       → /oauth-callback.html
+//   /YNAC/            → /YNAC/oauth-callback.html
+//   /YNAC/index.html  → /YNAC/oauth-callback.html
 function getRedirectUri() {
-  return window.location.origin + window.location.pathname.replace(/\/$/, '') + '/oauth-callback.html';
+  const base = window.location.pathname
+    .replace(/[^/]*\.[^/]*$/, '')
+    .replace(/\/+$/, '');
+  return window.location.origin + base + '/oauth-callback.html';
+}
+
+// Single-use OAuth `state` nonce. 128 bits from the CSPRNG, hex encoded, stashed
+// in sessionStorage so it dies with the tab and can never outlive the sign-in it
+// authorises. oauth-callback.html refuses to store a token whose `state` doesn't
+// match, which is what stops a crafted callback link from planting someone
+// else's access token in this origin's localStorage.
+function createStateNonce() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
 export function getStoredToken() {
@@ -47,6 +78,12 @@ export function getStoredToken() {
 
 export function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
+  try {
+    sessionStorage.removeItem(STATE_KEY);
+  } catch {
+    // sessionStorage can be unavailable (private mode, blocked storage) —
+    // nothing to clean up in that case.
+  }
 }
 
 export function startAuth() {
@@ -58,12 +95,29 @@ export function startAuth() {
     );
     return;
   }
+  const state = createStateNonce();
+  try {
+    sessionStorage.setItem(STATE_KEY, state);
+  } catch (e) {
+    // Without a stored nonce the callback has nothing to verify against and
+    // will reject the token, so stop here rather than starting a doomed round
+    // trip the user can't diagnose.
+    alert(
+      'YNAC needs session storage to sign in securely, and this browser is ' +
+      'blocking it. Enable storage for this site (or leave private browsing) ' +
+      'and try again.'
+    );
+    console.warn('[YNAC] Could not stash OAuth state nonce.', e);
+    return;
+  }
+
   const redirect = getRedirectUri();
   const url = new URL(AUTH_BASE);
   url.searchParams.set('client_id', clientId);
   url.searchParams.set('redirect_uri', redirect);
   url.searchParams.set('response_type', 'token');
   url.searchParams.set('scope', 'read-only');
+  url.searchParams.set('state', state);
   window.location.assign(url.toString());
 }
 

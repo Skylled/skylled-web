@@ -6,17 +6,48 @@ export function setCurrencyFormat(format) {
   currencyFormat = format || null;
 }
 
+// Intl.NumberFormat construction is expensive and these run ~100× per render
+// (one per calendar cell, plus every event amount). Cache by the only things
+// that vary: currency code and fraction digits. The locale is always the
+// system default, so it can't stale the cache.
+const formatterCache = new Map();
+
+function getFormatter(iso, minDecimals, maxDecimals) {
+  const key = `${iso}:${minDecimals}:${maxDecimals}`;
+  let formatter = formatterCache.get(key);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(undefined, {
+      style: 'currency',
+      currency: iso,
+      minimumFractionDigits: minDecimals,
+      maximumFractionDigits: maxDecimals,
+    });
+    formatterCache.set(key, formatter);
+  }
+  return formatter;
+}
+
+// The budget's currency code. Intl throws a RangeError on anything that isn't a
+// 3-letter alphabetic code, and getFormatter only caches on success — so one
+// malformed iso_code would re-throw on every call and blank the whole render.
+// Validate the shape and fall back to USD instead.
+function currencyCode() {
+  const iso = String(currencyFormat?.iso_code ?? '').trim().toUpperCase();
+  return /^[A-Z]{3}$/.test(iso) ? iso : 'USD';
+}
+
+// The budget's decimal precision. YNAB sends 0 for JPY/KRW-style currencies.
+// Coerced and clamped so a malformed budget payload can't throw out of Intl.
+function currencyDecimals() {
+  const d = Number(currencyFormat?.decimal_digits ?? 2);
+  if (!Number.isFinite(d)) return 2;
+  return Math.min(Math.max(Math.trunc(d), 0), 4);
+}
+
 export function formatMoney(milliunits, { signed = true } = {}) {
   const value = milliunits / 1000;
-  const iso = currencyFormat?.iso_code || 'USD';
-  const decimals = currencyFormat?.decimal_digits ?? 2;
-  const formatter = new Intl.NumberFormat(undefined, {
-    style: 'currency',
-    currency: iso,
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  });
-  const formatted = formatter.format(Math.abs(value));
+  const decimals = currencyDecimals();
+  const formatted = getFormatter(currencyCode(), decimals, decimals).format(Math.abs(value));
   if (!signed) return formatted;
   if (value < 0) return '−' + formatted;
   if (value > 0) return formatted;
@@ -26,15 +57,19 @@ export function formatMoney(milliunits, { signed = true } = {}) {
 // Short form: no decimals when whole, compact for prose. Always positive sign.
 export function formatMoneyShort(milliunits) {
   const value = Math.abs(milliunits) / 1000;
-  const iso = currencyFormat?.iso_code || 'USD';
   const whole = Math.round(value) === value;
-  const formatter = new Intl.NumberFormat(undefined, {
-    style: 'currency',
-    currency: iso,
-    minimumFractionDigits: whole ? 0 : 2,
-    maximumFractionDigits: whole ? 0 : 2,
-  });
-  return formatter.format(value);
+  // decimal_digits is a ceiling, not a suggestion: a 0-decimal currency must
+  // never show cents, whole value or not.
+  const decimals = whole ? 0 : Math.min(2, currencyDecimals());
+  return getFormatter(currencyCode(), decimals, decimals).format(value);
+}
+
+// Whole units only, always. Used for money inside prose sentences so one
+// sentence can't read "$2,288.98 in bills and $2,400 coming in". Unsigned,
+// like formatMoneyShort — callers supply the direction in words.
+export function formatMoneyWhole(milliunits) {
+  const value = Math.abs(milliunits) / 1000;
+  return getFormatter(currencyCode(), 0, 0).format(value);
 }
 
 export function formatEventAmount(milliunits) {
@@ -43,10 +78,9 @@ export function formatEventAmount(milliunits) {
   return milliunits < 0 ? '−' + short : '+' + short;
 }
 
+// formatMoneyShort is already unsigned, so the sign is entirely ours to add.
 export function formatBalance(milliunits) {
-  return formatMoneyShort(milliunits) === formatMoneyShort(-milliunits) && milliunits < 0
-    ? '−' + formatMoneyShort(-milliunits)
-    : (milliunits < 0 ? '−' : '') + formatMoneyShort(Math.abs(milliunits));
+  return (milliunits < 0 ? '−' : '') + formatMoneyShort(Math.abs(milliunits));
 }
 
 // Clamp a payee/memo string to fit in a narrow calendar cell.
