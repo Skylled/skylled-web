@@ -6,6 +6,11 @@
 # Conventional directory for build output.
 /build/
 
+# Firebase CLI deploy cache — regenerated on every `firebase deploy`, and
+# nothing reads it from source control. Note this does NOT cover .firebaserc,
+# which holds the project mapping and stays tracked.
+.firebase/
+
 # Miscellaneous
 *.class
 *.log
