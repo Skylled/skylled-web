@@ -38,36 +38,113 @@
   </div>
   <script>
     (function () {
+      // Storage keys are duplicated from js/auth.js on purpose: this page runs
+      // standalone, before any module loads. Keep them in sync.
+      const TOKEN_KEY = 'ynac.token';
+      const STATE_KEY = 'ynac.oauth_state';
+      const DEFAULT_TTL_SECONDS = 2 * 60 * 60; // YNAB implicit-grant tokens last 2h.
+      const MAX_TTL_SECONDS = 24 * 60 * 60;
+
+      // Everything in the fragment is attacker-supplied until the `state` nonce
+      // says otherwise — this origin holds the YNAB token, so nothing from here
+      // may ever reach innerHTML.
       const hash = window.location.hash.startsWith('#')
         ? window.location.hash.slice(1)
         : window.location.hash;
       const params = new URLSearchParams(hash);
       const token = params.get('access_token');
-      const expiresIn = parseInt(params.get('expires_in') || '0', 10);
+      const state = params.get('state');
       const err = params.get('error');
+      const errDescription = params.get('error_description');
+
+      // Drop the fragment as soon as it's parsed so the access token stops
+      // riding along in the address bar (and in anything the user pastes).
+      try {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      } catch (e) {
+        /* Non-fatal: the redirect below clears it anyway. */
+      }
+
+      const expected = takeStateNonce();
 
       if (err) {
-        document.getElementById('msg').innerHTML =
-          '<div class="error">Sign-in failed: ' + err + '. <a href="./">Try again</a>.</div>';
+        showError('Sign-in failed: ' + describe(err, errDescription) + '.');
         return;
       }
 
       if (!token) {
-        document.getElementById('msg').innerHTML =
-          '<div class="error">No access token returned. <a href="./">Try again</a>.</div>';
+        showError('No access token returned.');
+        return;
+      }
+
+      // Single-use nonce check, before the token touches localStorage. A
+      // callback link that didn't start from this tab's Sign in button gets
+      // nothing stored.
+      if (!expected || !state || state !== expected) {
+        showError(
+          'This sign-in response could not be verified, so it was discarded. ' +
+          'Start again from YNAC.'
+        );
         return;
       }
 
       try {
-        const expiresAt = Date.now() + (expiresIn ? expiresIn * 1000 : 2 * 60 * 60 * 1000);
-        localStorage.setItem('ynac.token', JSON.stringify({ token: token, expiresAt: expiresAt }));
+        localStorage.setItem(TOKEN_KEY, JSON.stringify({
+          token: token,
+          expiresAt: Date.now() + ttlSeconds(params.get('expires_in')) * 1000,
+        }));
       } catch (e) {
-        document.getElementById('msg').innerHTML =
-          '<div class="error">Could not save token to localStorage. ' + (e && e.message) + '</div>';
+        showError('Could not save token to localStorage: ' + (e && e.message ? e.message : 'unknown error') + '.');
         return;
       }
 
       window.location.replace('./');
+
+      // Read and immediately clear the nonce — it authorises exactly one
+      // callback, whatever the outcome.
+      function takeStateNonce() {
+        try {
+          const value = sessionStorage.getItem(STATE_KEY);
+          sessionStorage.removeItem(STATE_KEY);
+          return value;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function ttlSeconds(raw) {
+        const n = parseInt(raw || '', 10);
+        if (!isFinite(n) || n <= 0) return DEFAULT_TTL_SECONDS;
+        return Math.min(n, MAX_TTL_SECONDS);
+      }
+
+      // Untrusted strings, kept short so a padded fragment can't push the
+      // "Try again" link off the page.
+      function describe(code, description) {
+        const parts = [code, description].filter(Boolean).join(' — ');
+        return parts.length > 200 ? parts.slice(0, 200) + '…' : parts;
+      }
+
+      // Rebuilt as nodes: the message is textContent, the link is a real
+      // element. The old innerHTML version turned any crafted callback URL into
+      // script execution on the origin that stores the token.
+      function showError(text) {
+        const spinner = document.querySelector('.spinner');
+        if (spinner) spinner.remove();
+
+        const box = document.createElement('div');
+        box.className = 'error';
+        box.appendChild(document.createTextNode(text + ' '));
+        const link = document.createElement('a');
+        link.href = './';
+        link.textContent = 'Try again';
+        box.appendChild(link);
+        box.appendChild(document.createTextNode('.'));
+
+        const msg = document.getElementById('msg');
+        msg.textContent = '';
+        msg.appendChild(box);
+      }
     })();
   </script>
 </body>

@@ -27,6 +27,7 @@ class ArticleLayout extends PageLayoutBase {
     final description = data['description'] as String?;
     final date = data['date'] as String?;
     final readTime = data['readTime'] as String?;
+    final image = data['image'] as String?;
     final tags = data['tags'] is List ? (data['tags'] as List).map((e) => e.toString()).toList() : const <String>[];
     final primaryTag = tags.isNotEmpty ? tags.first : null;
 
@@ -47,7 +48,10 @@ class ArticleLayout extends PageLayoutBase {
           if (description != null) p(classes: 'article__dek', [Component.text(description)]),
         ]),
         figure(classes: 'article__hero', [
-          div(classes: 'article__hero-art', []),
+          if (image != null)
+            img(src: image, alt: '', classes: 'article__hero-img')
+          else
+            div(classes: 'article__hero-art', []),
         ]),
         article(classes: 'article__body', [child]),
         if (tags.isNotEmpty)
@@ -110,6 +114,11 @@ class ArticleLayout extends PageLayoutBase {
         'background':
             'linear-gradient(135deg, #e5e8ef 0%, #eceef3 55%, #f3f3f7 100%)',
       },
+      radius: BorderRadius.circular(0.75.rem),
+    ),
+    css('.article__hero-img').styles(
+      width: 100.percent,
+      height: Unit.auto,
       radius: BorderRadius.circular(0.75.rem),
     ),
     css('.article__body').styles(
@@ -178,6 +187,10 @@ class ArticleLayout extends PageLayoutBase {
       margin: Margin.symmetric(vertical: 2.rem),
       padding: Padding.all(1.25.rem),
       backgroundColor: Palette.surfaceContainer,
+      // jaspr_content's default `.content pre` color is tuned for a dark code
+      // background; our block is light, so set a readable on-surface color that
+      // `pre code` inherits.
+      color: Palette.onSurface,
       radius: BorderRadius.circular(0.5.rem),
       overflow: const Overflow.only(x: Overflow.auto),
       fontSize: 0.875.rem,

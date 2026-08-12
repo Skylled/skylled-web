@@ -27,6 +27,15 @@
   --radius: 14px;
   --radius-sm: 8px;
 
+  /* Jump-to-top button geometry. The clearance is what .app reserves at the
+     bottom so the fixed button never permanently covers the last row of
+     content: button height + its offset from the viewport bottom + a gap.
+     Derived rather than hand-tuned so resizing the button can't silently
+     reintroduce the overlap. */
+  --scroll-top-size: 44px;   /* >= 44px keeps it a comfortable touch target */
+  --scroll-top-offset: 24px;
+  --scroll-top-clearance: calc(var(--scroll-top-size) + var(--scroll-top-offset) + 28px);
+
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
 }
@@ -109,6 +118,13 @@ body[data-theme="dark"] {
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
+/* The UA's [hidden] { display: none } is a plain type-less rule, so ANY class
+   rule below that sets `display` silently beats it — which is how the amber
+   heads-up strip and a stale account balance were rendering on screens that had
+   set el.hidden = true. Nothing in this sheet may out-rank this; keep it here
+   and keep it !important. */
+[hidden] { display: none !important; }
+
 body {
   font-family: var(--font-sans);
   background: var(--bg);
@@ -121,7 +137,13 @@ body {
 .app {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 32px 24px 80px;
+  /* Bottom padding is load-bearing, not decorative: the jump-to-top button is
+     position: fixed in this corner, so at full scroll it would sit on top of
+     whatever the page ends with — the meta row's "View on YNAB" link, and on a
+     short window the last day cell. The padding guarantees empty space under
+     the final content for the button to float over.
+     Must stay >= --scroll-top-clearance. */
+  padding: 32px 24px var(--scroll-top-clearance);
 }
 
 /* ---------- Top bar ---------- */
@@ -387,6 +409,11 @@ body {
   font-size: 20px;
   letter-spacing: -0.01em;
 }
+.cal-header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
 .cal-legend { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); }
 .legend-item { display: inline-flex; align-items: center; gap: 6px; }
 .legend-swatch { width: 10px; height: 10px; border-radius: 3px; }
@@ -394,13 +421,125 @@ body {
 .legend-swatch.outflow { background: var(--surface-2); border: 1px solid var(--border-strong); }
 .legend-swatch.overdue { background: var(--red-soft); border: 1px solid var(--red); }
 
+/* ---------- Window switcher (30 / 60 / 90) ---------- */
+.range-toggle {
+  display: inline-flex;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px;
+  gap: 2px;
+}
+.range-opt {
+  appearance: none;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  padding: 4px 11px;
+  border-radius: 999px;
+  line-height: 1.4;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.range-opt:hover { color: var(--text); }
+.range-opt.is-active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+.range-opt:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 1px;
+}
+
+/* The drift caveat for windows that run past the confident horizon. */
+.cal-estimate-note {
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 76ch;
+}
+
 .cal-grid {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  /* `clip`, not `hidden`: both clip the corners, but `hidden` makes this a
+     scroll container, which re-anchors the sticky month headers in the mobile
+     agenda to this box instead of the viewport — they then scroll away with
+     the grid. `clip` creates no scroll container, so sticky works. Older
+     engines that don't know `clip` fall back to the `hidden` above and simply
+     lose the stickiness, which is a cosmetic loss, not a broken layout. */
   overflow: hidden;
+  overflow: clip;
   box-shadow: var(--shadow-sm);
 }
+
+/* ---------- Month sections ---------- */
+/* One grid per calendar month, stacked inside .cal-body. Each grid is its own
+   repeat(7, minmax(0,1fr)) at the same container width, so columns stay aligned
+   across months while :nth-child positional rules count per month. */
+.cal-month + .cal-month { border-top: 1px solid var(--border); }
+.cal-month-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.cal-month-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+.cal-month-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.cal-month-net {
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.cal-month-net.is-out { color: var(--text-muted); }
+.cal-month-net.is-in { color: var(--sage); }
+.cal-month-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+/* Beyond the confident horizon the running balance is scheduled-only. Fade the
+   cell so it reads as a forecast, not a fact. Kept subtle — the day still has
+   to be legible, and the low/negative tints below must still win. */
+.day-estimate { background: var(--surface-2); }
+.day-estimate .day-num,
+.day-estimate .day-dow,
+.day-estimate .day-bal { opacity: 0.72; }
+.day-estimate .event { opacity: 0.82; }
+/* Re-assert the warning tints: an amber or negative day past the horizon is
+   still the most important thing in the cell. */
+.day-estimate.day-low { background: var(--amber-soft); }
+.day-estimate.day-negative { background: var(--red-soft); }
+.day-estimate.day-low .day-bal,
+.day-estimate.day-negative .day-bal { opacity: 1; }
 .cal-dow {
   display: grid;
   /* minmax(0, 1fr) lets columns shrink below their content's min-content width.
@@ -425,7 +564,14 @@ body {
   grid-auto-rows: minmax(118px, auto);
 }
 .day {
-  padding: 8px 10px 28px;
+  /* Column flow rather than absolute-positioning the balance: the balance
+     block is pushed to the bottom with margin-top: auto, so it reserves
+     exactly the room it needs. Absolute positioning meant the cell had to
+     guess that room as padding-bottom, and a balance that wrapped to a second
+     line then rode up over the last event. */
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px 6px;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   position: relative;
@@ -449,15 +595,8 @@ body {
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.day-month-label {
-  font-size: 10.5px;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-left: 6px;
-  font-weight: 500;
-}
-.day-past .day-num { color: var(--text-faint); }
+/* .day-month-label removed — the per-month section header carries the month
+   name now, so labelling the 1st inside its cell was duplicate information. */
 .day-today { background: var(--sage-soft); }
 .day-today .day-num { color: var(--sage); font-weight: 700; }
 .day-today::before {
@@ -523,6 +662,27 @@ body {
   font-size: 10px;
   margin-right: 2px;
 }
+/* An overdue event also states the date it was originally due. A ~130px cell
+   has no room for payee + due date + amount on one line — sharing it just
+   shreds all three — so the tag takes a line of its own inside the pill. */
+.event.overdue { flex-wrap: wrap; justify-content: flex-start; }
+.event.overdue .event-amt { margin-left: auto; }
+.event-overdue-tag {
+  /* order + a 100% basis put it on the second line wherever it sits in the
+     markup. Ellipsis is belt-and-braces; a due date can't fill a whole line. */
+  order: 1;
+  flex: 1 0 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-caps: all-small-caps;
+  color: var(--red);
+}
 .event-more {
   font-size: 11px;
   color: var(--text-muted);
@@ -536,14 +696,82 @@ body {
 .event-more:hover { color: var(--text); }
 
 .day-bal {
-  position: absolute;
-  bottom: 6px;
-  right: 10px;
+  /* margin-top: auto pins it to the foot of the cell however tall the cell
+     ends up; align-self keeps it on the right rail the mockup puts it on. */
+  margin-top: auto;
+  align-self: flex-end;
+  padding-top: 6px;
+  max-width: 100%;
   font-size: 11.5px;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
   font-weight: 500;
 }
+
+/* Today's cell carries two figures — the balance right now and the projected
+   end of day — stacked in one block at the foot of the cell. Both children keep
+   .day-bal so the .day-low / .day-negative treatments still reach them. */
+.day-bals {
+  margin-top: auto;
+  padding-top: 6px;
+  /* Stretched to the cell's full inner width so each figure can right-align
+     against the same rail — and, when a figure has to wrap, so it has the
+     whole width to wrap into. */
+  align-self: stretch;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+.day-bals .day-bal {
+  /* Reset the single-balance rule: inside this block the parent does the
+     bottom-pinning, and align-self is declared here (not left to the parent)
+     so the mobile `.day-bal { align-self: start }` rule can't left-align
+     these rows. */
+  margin-top: 0;
+  padding-top: 0;
+  align-self: auto;
+  display: flex;
+  /* Wrap rather than truncate. A ~105px cell (viewports around 800px) cannot
+     hold "end of day" and a five-figure balance on one line; without this the
+     tag was the thing that gave, ellipsing to "end…". Wrapped, the tag takes
+     the first line and the number the second — both stay whole, and the cell
+     grows by exactly the one line it needs because the block is in flow. */
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0 4px;
+  max-width: 100%;
+  font-size: 11px;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.day-bal-tag {
+  /* Small caps, not text-transform: uppercase — same voice as .stat-label but
+     ~20% narrower, which is the difference between "end of day $2,045.01"
+     fitting a cell and not. */
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-caps: all-small-caps;
+  color: var(--text-muted);
+  /* Never shrink — the line wraps instead, so there is no reason to trade the
+     label away. Ellipsis stays as belt-and-braces for a cell narrower than the
+     word itself. */
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The actual balance is a fact, the projection is a forecast — weight them so. */
+.day-bal-actual { color: var(--text); font-weight: 600; }
+.day-bal-projected { color: var(--text-muted); }
+/* ...which also means the amber/red warning belongs to the projected figure
+   only. These come after .day-low/.day-negative so they win the tie. */
+.day-low .day-bal-actual,
+.day-negative .day-bal-actual { color: var(--text); font-weight: 600; }
 
 /* ---------- Meta ---------- */
 .meta {
@@ -555,6 +783,64 @@ body {
 }
 .meta a { color: var(--text-muted); text-decoration: none; }
 .meta a:hover { color: var(--text); }
+
+/* ---------- Jump to top ---------- */
+/* Visibility is class-driven rather than the [hidden] attribute: [hidden] is
+   `display: none !important` in this sheet (see the reset), and you cannot
+   transition out of display:none. `visibility` keeps it out of the tab order
+   while hidden, which opacity alone would not. */
+.scroll-top {
+  position: fixed;
+  right: var(--scroll-top-offset);
+  bottom: var(--scroll-top-offset);
+  z-index: 40;
+  width: var(--scroll-top-size);
+  height: var(--scroll-top-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.18s ease, transform 0.18s ease,
+              visibility 0.18s, color 0.15s ease, border-color 0.15s ease;
+}
+.scroll-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.scroll-top:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+.scroll-top:active { transform: translateY(1px); }
+.scroll-top:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+.scroll-top svg { width: 20px; height: 20px; display: block; }
+
+/* The confidence header carries tabindex="-1" purely as a focus target for the
+   jump-to-top button. Programmatic focus doesn't match :focus-visible, so no
+   ring appears for mouse users — but suppress the legacy :focus ring too, since
+   nothing here is keyboard-reachable by Tab. */
+.confidence:focus { outline: none; }
+.confidence:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+
+/* Respect a reduced-motion preference: appear instantly, and main.js skips
+   smooth scrolling for the same reason. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-top { transition: none; }
+  .scroll-top:active { transform: none; }
+}
 
 /* ---------- Sign-in / loading / error ---------- */
 .loading, .error-state, .signin {
@@ -674,12 +960,28 @@ body {
 
 /* ---------- Mobile: agenda ---------- */
 @media (max-width: 700px) {
-  .app { padding: 20px 16px 48px; }
+  /* Bottom padding keeps the --scroll-top-clearance reserve — see .app above.
+     A literal value here would silently put the fixed button back on top of
+     the last agenda row. */
+  .app { padding: 20px 16px var(--scroll-top-clearance); }
   .confidence { padding: 22px 20px 20px; }
   .confidence-verdict { font-size: 26px; }
   .confidence-stats { grid-template-columns: 1fr 1fr; gap: 16px; }
   .confidence-stats > :nth-child(3) { grid-column: span 2; padding-top: 12px; border-top: 1px solid var(--border); }
   .cal-legend { display: none; }
+  /* The window switcher stays — at 90 days on a phone it is the main way to
+     get back to a glanceable view. */
+  .cal-header-right { gap: 0; }
+  .cal-header { flex-wrap: wrap; gap: 8px; }
+
+  /* Month headers stick to the top of the agenda while you scroll that month,
+     so a long window never leaves you wondering which month you're in. */
+  .cal-month-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 9px 16px;
+  }
 
   .cal-dow { display: none; }
   .cal-days {
@@ -699,12 +1001,21 @@ body {
   .day-pad { display: none; }
   .day:nth-child(7n) { border-right: none; }
   .day::before { display: none; }
+  /* The TODAY chip is a grid item of the agenda row, and auto-placement handed
+     it the date's cell — which pushed .day-num-wrap into the events column,
+     where minmax(0, 1fr) collapsed it to 0px and the date disappeared behind
+     the first event chip. Pin every item of today's row to a column so the
+     chip stacks above the date instead of displacing it. */
+  .day-today { row-gap: 2px; }
   .day-today::before {
     grid-column: 1;
+    grid-row: 1;
     position: static;
     display: block;
-    margin-top: 2px;
   }
+  .day-today .day-num-wrap { grid-column: 1; grid-row: 2; }
+  .day-today .events { grid-column: 2; grid-row: 2; }
+  .day-today > .day-bal { grid-column: 3; grid-row: 2; }
   .day-num-wrap { display: flex; flex-direction: column; }
   .day-dow {
     font-size: 11px;
@@ -717,10 +1028,26 @@ body {
   .day-num { font-size: 18px; }
   .events { margin-top: 0; }
   .day-bal {
-    position: static;
+    /* The row's grid does the placing here, so the desktop bottom-pinning
+       (margin-top: auto would bottom-align it in its grid area) comes off. */
+    margin-top: 0;
+    padding-top: 0;
     align-self: start;
     font-size: 13px;
   }
+  /* Agenda rows: columns 1 and 2 are already spoken for by the date and the
+     events, so the balance block takes a row of its own and sets the two
+     figures side by side rather than squeezing them into the date column. */
+  .day-bals {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding-top: 0;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+  .day-bals .day-bal { font-size: 12.5px; }
   .day-empty .events::before {
     content: 'No events';
     color: var(--text-faint);
