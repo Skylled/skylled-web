@@ -25,11 +25,13 @@ const UNAVAILABLE = {
   verdict: "Some of the numbers didn't come through.",
 };
 
-// Closing clause of the reason sentence, keyed by level.
+// Second sentence of the reason, keyed by level. The first sentence names the
+// low point; this one says what it means. Kept short — the verdict headline
+// above already carries the tone.
 const TAILS = {
-  green: "there's still room.",
-  amber: "you're close to the edge.",
-  red: "you're over.",
+  green: 'Room to move.',
+  amber: 'Not much room.',
+  red: "That's underwater.",
 };
 
 export function renderConfidence({
@@ -62,7 +64,12 @@ export function renderConfidence({
   document.getElementById('confidence-verdict').textContent = v.verdict;
 
   document.getElementById('confidence-reason').textContent = usable
-    ? buildReason({ level, horizonLabel, outflowAbs, inflow, buffer, overdueN, overdueTotal })
+    ? buildReason({
+        level, horizonLabel, outflowAbs, inflow, buffer, overdueN, overdueTotal,
+        troughBalance: Number(c.troughBalance),
+        troughDate: c.troughDate,
+        safeToSpend: Number(c.safeToSpend),
+      })
     : "Safe-to-spend couldn't be worked out from the current data. Try refreshing, or check your settings.";
 
   // Stats
@@ -82,8 +89,13 @@ export function renderConfidence({
   ].filter(Boolean);
   document.getElementById('stat-outflow-sub').textContent = outflowSub.join(' · ') || '—';
 
+  // The sub-label names what the figure is derived from. It used to read "after
+  // bills and income", which described a netted total; the number is now the
+  // lowest point the balance reaches, so it has to say which day that is.
   document.getElementById('stat-safe').textContent = moneyStat(c.safeToSpend);
-  const safeBase = inflow > 0 ? 'After bills and income' : 'After bills';
+  const safeBase = c.troughDate
+    ? `Low point ${formatDateLabel(c.troughDate)}`
+    : 'No dip ahead';
   document.getElementById('stat-safe-sub').textContent =
     buffer > 0 ? `${safeBase}, minus ${formatMoneyWhole(buffer)} buffer` : safeBase;
 
@@ -106,17 +118,28 @@ export function renderConfidence({
 
 // Compose the reason sentence from the numbers. Money here is always whole
 // units — a sentence that mixes "$2,288.98" with "$2,400" reads like a typo.
-function buildReason({ level, horizonLabel, outflowAbs, inflow, buffer, overdueN, overdueTotal }) {
+//
+// The sentence has to name the low point and its date. Safe-to-spend is derived
+// from that one day, so a sentence that only quoted horizon totals would leave
+// the headline figure looking unrelated to every other number on the card —
+// which is precisely how the old netted number hid the problem it caused.
+function buildReason({
+  level, horizonLabel, outflowAbs, inflow, buffer, overdueN, overdueTotal,
+  troughBalance, troughDate, safeToSpend,
+}) {
   const parts = [];
   if (outflowAbs > 0 || inflow > 0) {
     const pieces = [];
     if (outflowAbs > 0) pieces.push(`${formatMoneyWhole(outflowAbs)} in bills`);
     if (inflow > 0) pieces.push(`${formatMoneyWhole(inflow)} coming in`);
-    // The buffer gets its own clause; joining it with "and" gave the sentence
-    // two "and"s and made it read as a third cash-flow item.
-    let sentence = `After ${pieces.join(' and ')} over the next ${horizonLabel}`;
-    if (buffer > 0) sentence += `, minus your ${formatMoneyWhole(buffer)} buffer`;
-    parts.push(`${sentence}, ${TAILS[level]}`);
+    const context = `After ${pieces.join(' and ')} over the next ${horizonLabel}`;
+    parts.push(
+      troughDate && Number.isFinite(troughBalance)
+        ? `${context}, your balance bottoms out at ${signedWhole(troughBalance)} on ${formatDateLabel(troughDate)}.`
+        : `${context}, nothing dips below what you have today.`
+    );
+    parts.push(describeMargin(safeToSpend, buffer));
+    parts.push(TAILS[level]);
   } else {
     parts.push(`Nothing scheduled in the next ${horizonLabel}.`);
     if (level !== 'red') parts.push('Easy stretch.');
@@ -134,6 +157,26 @@ function buildReason({ level, horizonLabel, outflowAbs, inflow, buffer, overdueN
     );
   }
   return parts.join(' ');
+}
+
+// How the low point sits against the buffer. Phrased two ways because
+// "leaves −$150" is not a sentence anyone parses at a glance.
+function describeMargin(safeToSpend, buffer) {
+  if (!Number.isFinite(safeToSpend)) return '';
+  if (safeToSpend >= 0) {
+    return buffer > 0
+      ? `That leaves ${formatMoneyWhole(safeToSpend)} once your ${formatMoneyWhole(buffer)} buffer is set aside.`
+      : `That leaves ${formatMoneyWhole(safeToSpend)} to spend.`;
+  }
+  return buffer > 0
+    ? `That's ${formatMoneyWhole(safeToSpend)} short of your ${formatMoneyWhole(buffer)} buffer.`
+    : `That's ${formatMoneyWhole(safeToSpend)} in the red.`;
+}
+
+// formatMoneyWhole is unsigned by design (callers supply direction in words),
+// but a trough can genuinely be negative and the sign is the whole point there.
+function signedWhole(milliunits) {
+  return (milliunits < 0 ? '−' : '') + formatMoneyWhole(milliunits);
 }
 
 // Big stat values keep their cents — but show a dash rather than "$NaN".

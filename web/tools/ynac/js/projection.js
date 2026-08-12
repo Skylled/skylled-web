@@ -372,10 +372,24 @@ const DEFAULT_HORIZON_DAYS = 7;
 // upstream too — this is the second lock on the same door.
 const DEFAULT_SPEND_BUFFER = 100_000; // milliunits ($100), mirrors settings DEFAULTS
 
-// Sum events inside the first `horizonDays` of `projection`, returning both
-// outflow (negative sum) and inflow (positive sum). Safe-to-spend factors
-// both: a paycheck that lands inside the horizon shouldn't be hidden from the
-// user just because it hasn't cleared yet.
+// Sum events inside the first `horizonDays` of `projection`, and walk the
+// running balance to find its LOW POINT — the number safe-to-spend is built on.
+//
+// Safe-to-spend is the TROUGH, not the endpoint. Netting the horizon's whole
+// outflow against its whole inflow answers "where do I end up", which is the
+// wrong question: it spends a paycheck that hasn't landed yet against bills
+// that come out before it does. A real case this got wrong — $1,090 balance,
+// $3,088 of bills and $4,024 of income over 14 days — reported $1,926 safe to
+// spend while the running balance bottomed out at $272 on day 11. Spending even
+// half the advertised figure overdrafts the account.
+//
+// The trough still credits income arriving BEFORE the low point, so the reason
+// netting existed (don't under-report around a payday cadence) survives intact.
+// What it refuses to credit is income arriving *after* the point of maximum
+// danger, which is the part that was never sound.
+//
+// `outflowHorizon` / `inflowHorizon` / `netFlow` are still returned — the header
+// quotes them as context for the number — but they no longer determine it.
 //
 // Every input is sanitized first. Junk in a setting used to produce a NaN
 // horizon, a loop that never ran, $0 of outflows and a confident green —
@@ -399,6 +413,15 @@ export function computeSpendConfidence({
 
   let outflowHorizon = 0; // negative
   let inflowHorizon = 0;  // positive
+
+  // Seeded with today's OPENING balance: money scheduled to arrive today has
+  // not necessarily arrived, so a same-day inflow must not raise the floor.
+  let troughBalance = balance;
+  // Stays null unless some day actually dips BELOW that opening balance, which
+  // lets the header tell "your balance bottoms out on the 23rd" apart from
+  // "nothing between now and then dips below what you already have".
+  let troughDate = null;
+
   for (let i = 0; i < n; i++) {
     const day = proj[i];
     if (!day) continue;
@@ -406,14 +429,31 @@ export function computeSpendConfidence({
       if (e.amount < 0) outflowHorizon += e.amount;
       else inflowHorizon += e.amount;
     }
+    const ending = Number(day.endingBalance);
+    // A day we can't read makes every balance after it meaningless. Skipping it
+    // would quietly report a floor computed from whichever days happened to
+    // parse — that is, a number higher than the truth.
+    if (!Number.isFinite(ending)) {
+      troughBalance = NaN;
+      troughDate = null;
+      break;
+    }
+    if (ending < troughBalance) {
+      troughBalance = ending;
+      troughDate = day.date;
+    }
   }
+
   const netFlow = outflowHorizon + inflowHorizon;
-  // safeToSpend = currentBalance + netFlow - spendBuffer
-  // (outflowHorizon is negative; inflowHorizon is positive; netFlow can be either.)
-  const safeToSpend = balance + netFlow - buffer;
+  // safeToSpend = (lowest projected balance in the horizon) - spendBuffer.
+  // Spend exactly this much today and the trough lands exactly on the buffer.
+  const safeToSpend = troughBalance - buffer;
 
   let level;
-  if (safeToSpend <= 0) level = 'red';
+  // NaN fails every comparison below, so an unusable trough would fall through
+  // to green — the one direction this app must never fail in. Catch it first.
+  if (!Number.isFinite(safeToSpend)) level = 'amber';
+  else if (safeToSpend <= 0) level = 'red';
   else if (safeToSpend < 2 * buffer) level = 'amber';
   else level = 'green';
 
@@ -422,6 +462,8 @@ export function computeSpendConfidence({
     outflowHorizon,
     inflowHorizon,
     netFlow,
+    troughBalance,
+    troughDate,
     safeToSpend,
     level,
     horizonDays: n,

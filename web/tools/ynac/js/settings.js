@@ -7,7 +7,13 @@ export const DEFAULTS = Object.freeze({
   budgetId: null,
   accountId: null,           // primary account id
   projectionDays: 30,        // calendar window: 30 | 60 | 90
-  warningThreshold: 200_000, // milliunits ($200)
+  // Sits one buffer ABOVE the buffer ($200 + $100), so a day is flagged while
+  // there is still headroom to react rather than at the moment the cushion is
+  // already gone. A threshold at or below spendBuffer would only ever fire once
+  // safe-to-spend had hit zero — a warning that arrives too late to act on.
+  // The two are not mechanically coupled: raise spendBuffer and this does not
+  // follow. See REG14.
+  warningThreshold: 300_000, // milliunits ($300)
   spendBuffer: 100_000,      // milliunits ($100)
   spendHorizonDays: 7,       // how many days out the "safe to spend" math looks
   includeSavings: true,      // count savings in the aggregate "all cash accounts" view

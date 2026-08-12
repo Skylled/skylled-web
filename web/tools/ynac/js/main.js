@@ -28,14 +28,16 @@ const AUTO_REFRESH_MS = 10 * 60 * 1000;
 // instead of waiting for the next interval tick.
 const STALE_MS = 5 * 60 * 1000;
 
-// Jump-to-top button. Only earns its place once the page is long enough to
-// have buried the spend-confidence header — which is really the 60/90-day
-// windows, where the calendar runs to several thousand pixels.
+// Scroll distance before the jump-to-top button appears. Roughly the point
+// where the spend-confidence header leaves the screen; it really earns its
+// place at 60/90 days, where the calendar runs to several thousand pixels.
 //
-// Declared up here with the other module constants, not next to wireScrollTop:
-// boot() runs at the top of this file and reaches wireScrollTop() -> sync()
-// synchronously, so a `const` declared further down is still in the temporal
-// dead zone by the time it is read.
+// EVERY module-level const must be declared ABOVE the `boot()` call below.
+// `boot()` runs during module evaluation and synchronously reaches wireUi(),
+// so a const declared further down the file is still in the temporal dead
+// zone when it is read — which throws before showSignIn() can run and leaves
+// the app stuck on "Loading your budget…". Function declarations hoist and are
+// fine; `const`/`let` do not.
 const SCROLL_TOP_AFTER_PX = 600;
 
 const state = {
