@@ -21,26 +21,10 @@ Two things to know:
 
 ## Tools (`/tools/`)
 
-Each tool is a static bundle under `web/tools/<slug>/`; Jaspr copies `web/` into `build/jaspr/` verbatim. The index page is `content/tools/index.md` — add a card there via its `tools:` frontmatter list.
+The index page is `content/tools/index.md`; add a card via its `tools:` frontmatter list. A card links to `/tools/<slug>/` by default, which serves a static bundle from `web/tools/<slug>/` (Jaspr copies `web/` into `build/jaspr/` verbatim). A tool hosted elsewhere sets `url:` on its card instead.
 
 ### YNAC
 
-**YNAC now lives at `https://ynac.skylled.dev/`** (a Cloudflare Worker, deployed from the YNAC repo). `firebase.json` 301-redirects every `/tools/ynac/*` path to it (permanent: browsers cache 301s indefinitely, so this can't practically be rolled back), and the tools card links there via `url:` in `content/tools/index.md`. The `web/tools/ynac/` copy is still deployed but unreachable behind the redirect, so syncing into it changes nothing users see. It and `scripts/sync-ynac.sh` are due to be removed.
+YNAC lives at **https://ynac.skylled.dev/**, a Cloudflare Worker developed and deployed from its own repo: `github.com/Skylled/YNAC`, cloned at `~/Repos/YNAC`. Nothing of it remains in this repo except its card (`url:` in `content/tools/index.md`) and the redirects in `firebase.json`.
 
-**YNAC is developed in a different repo** — `github.com/Skylled/YNAC`, cloned at `~/Repos/YNAC`. What lives in `web/tools/ynac/` is only a published copy.
-
-**Do not hand-edit `web/tools/ynac/`.** Fix things upstream, commit there, then sync:
-
-```bash
-./scripts/sync-ynac.sh            # sync only, then review `git diff`
-./scripts/sync-ynac.sh --deploy   # sync, build, deploy, verify
-```
-
-Only 12 runtime files are published (`index.html`, `oauth-callback.html`, `css/`, `js/`, `assets/`). The rest of the YNAC repo — `CLAUDE.md`, `README.md`, the spec, `mockup.html`, `layout-test.html`, `tests.html` — is dev material and is deliberately not served.
-
-The script guards two failures that both reached production silently:
-
-1. **Missing production client ID.** An upstream refactor once replaced the `skylled.dev` entry in `js/auth.js` with a placeholder. Sign-in broke in production only; localhost kept working, so nothing looked wrong locally.
-2. **Temporal dead zone in `js/main.js`.** `boot()` is called during module evaluation and synchronously reaches `wireUi()`, so *every* module-level `const`/`let` must be declared above it. One declared below threw before `showSignIn()` could run and left the app stuck on "Loading your budget…".
-
-Both returned HTTP 200 for every file. **Always load the page in a browser after deploying** — `curl` cannot catch this class of failure.
+The old copy used to be served at `/tools/ynac/`. `firebase.json` now 301-redirects every path under it to the new app's root, not to the matching path, because the new app's paths differ (sign-in moved to `/api/callback`). Browsers cache 301s indefinitely, so keep those redirects in place.
