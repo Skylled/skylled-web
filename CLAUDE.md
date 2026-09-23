@@ -9,6 +9,8 @@ dart pub global run jaspr_cli:jaspr build   # -> build/jaspr
 firebase deploy --only hosting              # publishes build/jaspr
 ```
 
+The build also writes `build/jaspr/packages/`: non-Dart files copied from dependencies (`intl` locale data, `jaspr_content` build metadata, DDC loaders). The site is pure static HTML with no client-side Dart, so nothing loads them; `firebase.json` ignores `packages/**` so they aren't published. Any other host needs the same exclusion.
+
 **A Firebase Hosting deploy replaces the entire site.** Anything live on skylled.dev that is not in `build/jaspr` is deleted by the next deploy. A hidden `/cybertronic/` demo was lost this way in August 2026 — it had been uploaded directly and never existed under `web/`. If you find something live that isn't in this repo, say so *before* deploying.
 
 ## Caching
