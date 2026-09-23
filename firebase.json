@@ -10,12 +10,12 @@
       {
         "source": "/tools/ynac",
         "destination": "https://ynac.skylled.dev/",
-        "type": 302
+        "type": 301
       },
       {
         "source": "/tools/ynac/**",
         "destination": "https://ynac.skylled.dev/",
-        "type": 302
+        "type": 301
       }
     ],
     "headers": [
