@@ -25,6 +25,8 @@ Each tool is a static bundle under `web/tools/<slug>/`; Jaspr copies `web/` into
 
 ### YNAC
 
+**YNAC now lives at `https://ynac.skylled.dev/`** (a Cloudflare Worker, deployed from the YNAC repo). `firebase.json` 302-redirects every `/tools/ynac/*` path to it, and the tools card links there via `url:` in `content/tools/index.md`. The `web/tools/ynac/` copy is still deployed but unreachable behind the redirect; it's kept only as a rollback (delete the redirects to restore it). Once it's retired, remove it along with `scripts/sync-ynac.sh`, and switch the redirect to 301.
+
 **YNAC is developed in a different repo** — `github.com/Skylled/YNAC`, cloned at `~/Repos/YNAC`. What lives in `web/tools/ynac/` is only a published copy.
 
 **Do not hand-edit `web/tools/ynac/`.** Fix things upstream, commit there, then sync:

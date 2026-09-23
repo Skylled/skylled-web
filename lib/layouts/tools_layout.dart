@@ -44,7 +44,7 @@ class ToolsLayout extends PageLayoutBase {
         if (tools.isNotEmpty)
           section(classes: 'tools__grid', [
             for (final t in tools)
-              a(classes: 'tools__card', href: '/tools/${t.slug}/', [
+              a(classes: 'tools__card', href: t.url ?? '/tools/${t.slug}/', [
                 div(classes: 'tools__card-art', []),
                 div(classes: 'tools__card-meta', [
                   if (t.tagline != null) Component.text(t.tagline!.toUpperCase()),
@@ -191,16 +191,21 @@ class ToolsLayout extends PageLayoutBase {
 }
 
 class _Tool {
-  const _Tool({required this.name, required this.slug, this.tagline, this.description});
+  const _Tool({required this.name, required this.slug, this.url, this.tagline, this.description});
 
   final String name;
   final String slug;
+
+  /// Where the card links. Defaults to `/tools/<slug>/`; set it for a tool
+  /// hosted elsewhere, such as its own subdomain.
+  final String? url;
   final String? tagline;
   final String? description;
 
   factory _Tool.fromMap(Map m) => _Tool(
     name: m['name']?.toString() ?? 'Tool',
     slug: m['slug']?.toString() ?? '',
+    url: m['url']?.toString(),
     tagline: m['tagline']?.toString(),
     description: m['description']?.toString(),
   );
