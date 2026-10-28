@@ -64,10 +64,11 @@ dart pub global run jaspr_cli:jaspr build    # -> build/jaspr
 ```
 
 If this fails with `Incompatible version with current running build daemon:
-Project resolved build_daemon 4.1.1 …`, the committed `pubspec.lock` is too old
-for the current `jaspr_cli`. Run `dart pub upgrade build_runner` and commit the
-lockfile. (That is what was needed to build with jaspr_cli 0.23.5 during QL-374;
-the lockfile was not changed in this branch.)
+Project resolved build_daemon 4.1.1 …`, the lockfile's `build_daemon` is too old
+for the installed `jaspr_cli`. QL-374 fixed this with `dart pub upgrade
+build_daemon` (it also moved `build_web_compilers` 4.4.17 → 4.8.5 and
+`scratch_space`, and dropped `build_modules`). The lockfile now requires Dart
+3.13 or newer, so an older SDK (for example on a CI image) needs updating.
 
 ## Cutover checklist (Kyle)
 
