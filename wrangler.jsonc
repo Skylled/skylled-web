@@ -1,0 +1,13 @@
+// Static-assets-only Worker (no `main`, so no Worker script) serving the Jaspr
+// build. See docs/cloudflare-cutover.md. Build first: jaspr build -> build/jaspr.
+{
+  "name": "skylled-web",
+  "compatibility_date": "2026-10-28",
+  "assets": {
+    "directory": "./build/jaspr",
+    // /foo serves foo.html or foo/index.html; the other form redirects to it.
+    "html_handling": "auto-trailing-slash",
+    // Serve the nearest 404.html with a 404 status, else a plain 404.
+    "not_found_handling": "404-page"
+  }
+}

@@ -11,6 +11,23 @@ firebase deploy --only hosting              # publishes build/jaspr
 
 The build also writes `build/jaspr/packages/`: non-Dart files copied from dependencies (`intl` locale data, `jaspr_content` build metadata, DDC loaders). The site is pure static HTML with no client-side Dart, so nothing loads them; `firebase.json` ignores `packages/**` so they aren't published. Any other host needs the same exclusion.
 
+### Cloudflare Worker (prepared, not live)
+
+The site is also set up to deploy as a static-assets-only Cloudflare Worker named `skylled-web` (`wrangler.jsonc`, no Worker script, serves `build/jaspr`). **Until cutover (QL-374) skylled.dev is still served by Firebase and nothing has been deployed to the Worker.** Cutover, verification and rollback steps are in `docs/cloudflare-cutover.md`; Kyle does the cutover. `firebase.json` stays until he retires Firebase, so keep the two in step: a header or redirect changed in one needs the same change in the other.
+
+```bash
+dart pub global run jaspr_cli:jaspr build   # -> build/jaspr, same build as Firebase
+npx wrangler@4 deploy                       # Kyle / Ground Control only
+```
+
+Where the Firebase settings live on the Worker side:
+- `web/_headers` and `web/_redirects` replace the `headers` and `redirects` in `firebase.json` (no-cache everywhere; the `/tools/ynac` 301s).
+- `web/.assetsignore` replaces its `ignore` list for `build/jaspr/packages/`, `.dart_tool/` and `.build.manifest`. Do not add a blanket `.*` rule: Wrangler uploads dot-directories, unlike Firebase's `**/.*` rule, and `/.well-known/assetlinks.json` (Android passkeys for `dev.skylled.pocketace`, `get_login_creds` only) must be published. `/.well-known/webauthn` must stay 404.
+- Firebase does *not* publish `web/.well-known/`, and would publish `/_headers` and `/_redirects` as plain files. That only matters if you roll back to Firebase; see the cutover doc.
+- `/tools` → `/tools/` is a 307 on Cloudflare (`html_handling: auto-trailing-slash`) and a 301 on Firebase.
+
+If `jaspr build` fails with "Incompatible version with current running build daemon", the lockfile's `build_daemon` is too old for the installed `jaspr_cli`: `dart pub upgrade build_daemon` and commit `pubspec.lock`. The lock now requires Dart 3.13+.
+
 **A Firebase Hosting deploy replaces the entire site.** Anything live on skylled.dev that is not in `build/jaspr` is deleted by the next deploy. A hidden `/cybertronic/` demo was lost this way in August 2026 — it had been uploaded directly and never existed under `web/`. If you find something live that isn't in this repo, say so *before* deploying.
 
 ## Caching

@@ -1,0 +1,4 @@
+# Same as the firebase.json redirects. Both go to the new app's root, not the
+# matching path (its routes differ). Keep them: browsers cache 301s forever.
+/tools/ynac https://ynac.skylled.dev/ 301
+/tools/ynac/* https://ynac.skylled.dev/ 301
