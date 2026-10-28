@@ -1,0 +1,4 @@
+# Cloudflare Workers static assets: same policy as firebase.json (no-cache
+# site-wide, so deploys go live immediately). See CLAUDE.md "Caching".
+/*
+  Cache-Control: no-cache

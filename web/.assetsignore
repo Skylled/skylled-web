@@ -1,0 +1,7 @@
+# Wrangler skips these when uploading build/jaspr. It's the equivalent of the
+# "ignore" list in firebase.json, whose `**/.*` rule hid the build metadata but
+# is deliberately NOT mirrored here: /.well-known/ must be uploaded.
+# (_headers, _redirects and .assetsignore itself are never uploaded either.)
+/packages/
+/.dart_tool/
+/.build.manifest
