@@ -22,7 +22,7 @@ npx wrangler@4 deploy                       # Kyle / Ground Control only
 
 Where the Firebase settings live on the Worker side:
 - `web/_headers` and `web/_redirects` replace the `headers` and `redirects` in `firebase.json` (no-cache everywhere; the `/tools/ynac` 301s).
-- `web/.assetsignore` replaces its `ignore` list for `build/jaspr/packages/`, `.dart_tool/` and `.build.manifest`. Do not add a blanket `.*` rule: Wrangler uploads dot-directories, unlike Firebase's `**/.*` rule, and `/.well-known/assetlinks.json` (Android passkeys for `dev.skylled.pocketace`, `get_login_creds` only) must be published. `/.well-known/webauthn` must stay 404.
+- `web/.assetsignore` replaces its `ignore` list for `build/jaspr/packages/`, `.dart_tool/` and `.build.manifest`. Do not add a blanket `.*` rule: Wrangler uploads dot-directories, unlike Firebase's `**/.*` rule, and `/.well-known/assetlinks.json` (Android passkeys for `dev.skylled.pocketace`, `get_login_creds` for passkeys, plus `handle_all_urls`, which Credential Manager expects but is inert here: no autoVerify intent filters) must be published. `/.well-known/webauthn` must stay 404.
 - Firebase does *not* publish `web/.well-known/`, and would publish `/_headers` and `/_redirects` as plain files. That only matters if you roll back to Firebase; see the cutover doc.
 - `/tools` → `/tools/` is a 307 on Cloudflare (`html_handling: auto-trailing-slash`) and a 301 on Firebase.
 
