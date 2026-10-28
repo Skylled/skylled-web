@@ -1,5 +1,5 @@
-Title: QL-374: Serve skylled.dev from a Cloudflare Worker, with passkey assetlinks.json
 Draft: false
+Title: QL-374: Serve skylled.dev from a Cloudflare Worker, with passkey assetlinks.json
 
 Makes the site deployable as a static-assets-only Cloudflare Worker named `skylled-web`, ready to leave Firebase Hosting, and publishes the Android passkey verification file. **Nothing is deployed, DNS is untouched, and `firebase.json` stays.**
 
